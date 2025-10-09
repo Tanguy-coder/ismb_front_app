@@ -1,93 +1,95 @@
-# ismb_app_front
+# Free Angular Tailwind Admin Dashboard Template - TailAdmin Angular
+
+TailAdmin Angular is a **free and open-source admin dashboard template** built with **Angular** and **Tailwind CSS**. It provides developers with everything they need to create a feature-rich, data-driven **back-end, dashboard, or admin panel** for any type of web project.
+
+![TailAdmin Angular Admin Dashboard](./angular-tailwind.png)
 
 
+With TailAdmin Angular, you’ll get access to a complete set of **dashboard UI components, elements, and ready-to-use pages** to build a modern, high-quality admin panel. Whether it’s for a **complex web application** or a **lightweight project**, TailAdmin Angular is designed to speed up development of any kind of dashboards and admin panels.
 
-## Getting started
+TailAdmin leverages the **powerful ecosystem of Angular 20+**, along with **TypeScript** and the utility-first styling of **Tailwind CSS v4**. Combined, they make TailAdmin Angular a perfect foundation to launch your dashboard or admin panel quickly and effectively.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+TailAdmin Angular comes with essential UI components and layouts for building **feature-rich, data-driven dashboards** and **admin panels**. TailAdmin Angular is built on:
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+* **Angular 20+**
+* **TypeScript**
+* **Tailwind CSS v4**
 
-## Add your files
+### Quick Links
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+- ✨ [Visit Website](https://tailadmin.com/)
+- 🚀 [Angular Demo](https://angular-demo.tailadmin.com/)
+- 📄 [Documentation](https://tailadmin.com/docs)
+- ⬇️ [Download](https://tailadmin.com/download)
+- 🖌️ [Figma Design File (Free Edition)](https://www.figma.com/community/file/1463141366275764364)
+- ⚡ [Get PRO Version](https://tailadmin.com/pricing)
+---
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/Toor96/ismb_app_front.git
-git branch -M main
-git push -uf origin main
-```
+## Feature Comparison
 
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/Toor96/ismb_app_front/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+| Feature | Free Version | Pro Version 🌟 |
+|---------|--------------|----------------|
+| **Dashboards** | 1 Unique Dashboard | 7 Unique Dashboards: Analytics, Ecommerce, Marketing, SaaS, CRM, Stocks, Logistics and more (more coming soon) 📈 |
+| **UI Elements and Components** | 100+ UI elements and components | Included in 500+ components and UI elements |
+| **Design Files** | Basic Figma design files | Complete Figma design system file |
+| **Support** | Community support| Email support |
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Prerequisites
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Before you start, make sure you have:
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+* **Node.js 18.x or later** (Node.js 20.x recommended)
+* **Angular CLI** installed globally:
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+```bash
+npm install -g @angular/cli
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+---
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### Cloning the Repository
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Clone the repository:
 
-## License
-For open source projects, say how it is licensed.
+```bash
+git clone https://github.com/TailAdmin/free-angular-admin-dashboard.git
+```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+---
+
+### Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+---
+
+### Start Development Server
+
+```bash
+npm start
+```
+
+Then open:
+👉 `http://localhost:4200`
+
+---
+
+## Angualr.js Tailwind Components
+
+TailAdmin Angular ships with a rich set of **ready-to-use dashboard features**:
+
+* **Ecommerce Dashboard** with essential elements
+* Modern, accessible **sidebar navigation**
+* **Data visualization** with charts and graphs
+* **User profile management** and a **custom 404 page**
+* **Tables** and **charts** (line, bar, etc.)
+* **Authentication forms** and reusable input components
+* **UI elements**: alerts, dropdowns, modals, buttons, and more
+* Built-in **Dark Mode** 🕶️
+* and many more
