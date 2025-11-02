@@ -37,8 +37,11 @@ export class AppSidebarComponent {
         { name: "Annee", path: "/annee" },
         { name: "Niveau", path: "/niveau" },
         { name: "Filière", path: "/filiere" },
+        { name: "Étudiants", path: "/etudiants" },
+        { name: "Matieres", path: "/matieres" },
         { name: "Roles", path: "/role" },
         { name: "Permissions", path: "/permission" },
+        { name: "Users", path: "/users" },
       ],
     },
     {

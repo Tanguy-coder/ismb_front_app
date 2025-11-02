@@ -1,35 +1,44 @@
 <div>
-    <app-page-breadcrumb pageTitle="Gestion des Filières" />
+    <app-page-breadcrumb pageTitle="Gestion des Matières" />
 
     <!-- Form Section -->
     <div class="rounded-sm border border-stroke  p-4 mb-6">
-        <h3 class="font-medium text-black dark:text-white text-lg mb-4">{{ editMode ? 'Modifier' : 'Créer' }} une Filière</h3>
+        <h3 class="font-medium text-black dark:text-white text-lg mb-4">{{ editMode ? 'Modifier' : 'Créer' }} une Matière</h3>
         <form (ngSubmit)="onSubmit()" #myForm="ngForm">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div>
                     <app-label>Libellé</app-label>
                     <app-input-field
-                        placeholder="Ex : Génie Logiciel"
+                        placeholder="Ex : Algorithmique"
                         id="libelle"
-                        [(ngModel)]="filiere.libelle"
+                        [(ngModel)]="matiere.libelle"
                         name="libelle"
                         required
                     ></app-input-field>
                 </div>
                 <div>
-                    <app-label>Description</app-label>
+                    <app-label>Sigle</app-label>
                     <app-input-field
-                        placeholder="Description de la filière"
-                        id="description"
-                        [(ngModel)]="filiere.description"
-                        name="description"
+                        placeholder="Ex : ALGO"
+                        id="sigle"
+                        [(ngModel)]="matiere.sigle"
+                        name="sigle"
+                    ></app-input-field>
+                </div>
+                <div>
+                    <app-label>Type</app-label>
+                    <app-input-field
+                        placeholder="Ex : Scientifique"
+                        id="type"
+                        [(ngModel)]="matiere.type"
+                        name="type"
                     ></app-input-field>
                 </div>
                 <div>
                     <app-label>Niveau</app-label>
                     <select
                         id="niveau"
-                        [(ngModel)]="filiere.niveau"
+                        [(ngModel)]="matiere.niveau"
                         name="niveau"
                         required
                         class="dark:bg-dark-900 h-[42px] w-full rounded-lg border
@@ -68,7 +77,7 @@
         <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div>
                 <h4 class="text-xl font-semibold text-black dark:text-white">
-                    Liste des Filières
+                    Liste des Matières
                 </h4>
             </div>
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -95,32 +104,36 @@
                 <thead class="border-gray-100 border-y dark:border-white/[0.05]">
                     <tr>
                         <th class="py-3 pl-5 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400 sm:pl-6">Libellé</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Description</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Sigle</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Type</th>
                         <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Niveau</th>
                         <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                    <tr *ngFor="let filiere of filieres">
+                    <tr *ngFor="let matiere of matieres">
                         <td class="py-4 pl-5 sm:pl-6">
-                            <h5 class="font-medium text-gray-700 dark:text-gray-400">{{ filiere.libelle }}</h5>
+                            <h5 class="font-medium text-gray-700 dark:text-gray-400">{{ matiere.libelle }}</h5>
                         </td>
                         <td class="px-4 py-4 text-gray-700 dark:text-gray-400">
-                            <p>{{ filiere.description }}</p>
+                            <p>{{ matiere.sigle }}</p>
                         </td>
                         <td class="px-4 py-4 text-gray-700 dark:text-gray-400">
-                            <p>{{ filiere.niveau?.libelle }}</p>
+                            <p>{{ matiere.type }}</p>
+                        </td>
+                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">
+                            <p>{{ matiere.niveau?.libelle }}</p>
                         </td>
                         <td class="px-4 py-4">
                             <div class="flex items-center space-x-3.5">
-                                <button (click)="onEdit(filiere)" class="font-medium text-brand-500 hover:text-brand-600">Modifier</button>
-                                <button (click)="onDelete(filiere.id)" class="font-medium text-error-500 hover:text-error-600">Supprimer</button>
+                                <button (click)="onEdit(matiere)" class="font-medium text-brand-500 hover:text-brand-600">Modifier</button>
+                                <button (click)="onDelete(matiere.id)" class="font-medium text-error-500 hover:text-error-600">Supprimer</button>
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="filieres.length === 0">
-                        <td colspan="4" class="py-10 text-center">
-                            Aucune filière trouvée.
+                    <tr *ngIf="matieres.length === 0">
+                        <td colspan="5" class="py-10 text-center">
+                            Aucune matière trouvée.
                         </td>
                     </tr>
                 </tbody>

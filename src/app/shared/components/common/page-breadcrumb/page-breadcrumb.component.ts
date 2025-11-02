@@ -10,5 +10,7 @@ import { RouterModule } from '@angular/router';
   styles: ``
 })
 export class PageBreadcrumbComponent {
-  @Input() pageTitle = '';
+  @Input() title = '';
+  @Input() items: string[] = [];
+  @Input() active_item = '';
 }

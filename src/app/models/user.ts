@@ -6,7 +6,10 @@ export class User {
     prenom?: string;
     username?: string;
     contact?: string;
+    email?: string;
     password?: string;
     roles?: Role;
-    isActive?: boolean;
+    active?: boolean;
+
+
 }

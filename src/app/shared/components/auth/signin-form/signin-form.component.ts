@@ -7,6 +7,9 @@ import { InputFieldComponent } from '../../form/input/input-field.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
+import { AuthService } from '../../../../services/auth.service';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-signin-form',
   imports: [
@@ -26,16 +29,29 @@ export class SigninFormComponent {
   showPassword = false;
   isChecked = false;
 
-  email = '';
+  username = '';
   password = '';
+  errorMessage = '';
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
   onSignIn() {
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
-    console.log('Remember Me:', this.isChecked);
+    this.errorMessage = '';
+    console.log(this.username, this.password)
+    this.authService.login({ username: this.username, password: this.password })
+      .subscribe(success => {
+        if (success) {
+          this.router.navigate(['/']);
+        } else {
+          this.errorMessage = 'Email ou mot de passe incorrect.';
+        }
+      }, error => {
+        this.errorMessage = 'Une erreur est survenue lors de la connexion.';
+        console.error(error);
+      });
   }
 }

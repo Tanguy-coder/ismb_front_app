@@ -22,13 +22,18 @@ import {EtablissementComponent} from "./pages/etablissement/etablissement/etabli
 import {AnneeScolaireComponent} from "./pages/annee/annee-scolaire/annee-scolaire.component";
 import {NiveauComponent} from "./pages/niveau/niveau/niveau.component";
 import {FiliereComponent} from "./pages/filiere/filiere/filiere.component";
+import {MatiereComponent} from "./pages/matiere/matiere/matiere.component";
 import {RoleComponent} from "./pages/role/role/role.component";
 import {PermissionComponent} from "./pages/permission/permission/permission.component";
+import {EtudiantComponent} from "./pages/etudiant/etudiant.component";
+import { authGuard } from './services/auth.guard';
+import {UserComponent} from "./pages/user/user/user.component";
 
 export const routes: Routes = [
   {
     path:'',
     component:AppLayoutComponent,
+    canActivate: [authGuard],
     children:[
       {
         path: '',
@@ -59,6 +64,16 @@ export const routes: Routes = [
         title: 'Filiere',
       },
       {
+        path: 'matieres',
+        component: MatiereComponent,
+        title: 'Matiere',
+      },
+      {
+        path: 'etudiants',
+        component: EtudiantComponent,
+        title: 'Etudiants',
+      },
+      {
         path: 'role',
         component: RoleComponent,
         title: 'Role',
@@ -67,6 +82,11 @@ export const routes: Routes = [
         path: 'permission',
         component: PermissionComponent,
         title: 'Permission',
+      },
+      {
+        path: 'users',
+        component: UserComponent,
+        title: 'Utilisateurs',
       },
 
 
