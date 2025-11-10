@@ -20,6 +20,7 @@ export class MultiSelectComponent {
   @Input() options: Option[] = [];
   @Input() defaultSelected: string[] = [];
   @Input() disabled: boolean = false;
+  @Input() placeholder: string = 'Sélectionner...';
   @Output() selectionChange = new EventEmitter<string[]>();
 
   selectedOptions: string[] = [];

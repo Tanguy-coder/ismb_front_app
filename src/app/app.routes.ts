@@ -28,6 +28,8 @@ import {PermissionComponent} from "./pages/permission/permission/permission.comp
 import {EtudiantComponent} from "./pages/etudiant/etudiant.component";
 import { authGuard } from './services/auth.guard';
 import {UserComponent} from "./pages/user/user/user.component";
+import {EnseignantComponent} from "./pages/enseignant/enseignant.component";
+import {UeComponent} from "./pages/ue/ue.component";
 
 export const routes: Routes = [
   {
@@ -74,6 +76,11 @@ export const routes: Routes = [
         title: 'Etudiants',
       },
       {
+        path: 'enseignants',
+        component: EnseignantComponent,
+        title: 'Enseignants',
+      },
+      {
         path: 'role',
         component: RoleComponent,
         title: 'Role',
@@ -87,6 +94,16 @@ export const routes: Routes = [
         path: 'users',
         component: UserComponent,
         title: 'Utilisateurs',
+      },
+      {
+        path: 'ues',
+        component: UeComponent,
+        title: 'Unités d\'Enseignement',
+      },
+      {
+        path: 'notes',
+        loadComponent: () => import('./pages/note/note.component').then(m => m.NoteComponent),
+        title: 'Notes',
       },
 
 

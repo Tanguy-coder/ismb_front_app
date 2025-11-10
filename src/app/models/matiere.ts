@@ -5,5 +5,5 @@ export class Matiere {
     libelle?: string;
     sigle?: string;
     type?: string;
-    niveau?: Niveau;
+    niveaux?: Niveau[];
 }

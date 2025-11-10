@@ -1,0 +1,136 @@
+<div>
+    <app-page-breadcrumb pageTitle="Enseignants" />
+
+    <!-- Form Section -->
+    <div class="rounded-sm border border-stroke p-4 mb-6">
+        <h3 class="font-medium text-black dark:text-white text-lg mb-4">{{ editMode ? 'Modifier' : 'Créer' }} un Enseignant</h3>
+        <form (ngSubmit)="onSubmit()" #enseignantForm="ngForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <app-label for="nom">Nom</app-label>
+                    <app-input-field id="nom" name="nom" [(ngModel)]="enseignant.nom" required />
+                </div>
+                <div>
+                    <app-label for="prenom">Prénom</app-label>
+                    <app-input-field id="prenom" name="prenom" [(ngModel)]="enseignant.prenom" required />
+                </div>
+                <div>
+                    <app-label for="email">Email</app-label>
+                    <app-input-field id="email" name="email" type="email" [(ngModel)]="enseignant.email" required />
+                </div>
+
+                <div>
+                    <app-label for="date_naissance">Date de naissance</app-label>
+                    <app-input-field id="date_naissance" name="dateNaissance" type="date" [(ngModel)]="enseignant.dateNaissance" />
+                </div>
+                <div>
+                    <app-label for="lieu_naissance">Lieu de naissance</app-label>
+                    <app-input-field id="lieu_naissance" name="lieuNaissance" [(ngModel)]="enseignant.lieuNaissance" />
+                </div>
+                 <div>
+                    <app-label for="sexe">Sexe</app-label>
+                    <select id="sexe" name="sexe" [(ngModel)]="enseignant.sexe"
+                            class="dark:bg-dark-900 h-[42px] w-full rounded-lg border
+                         border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs
+                          placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3
+                           focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900
+                            dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                    >
+                        <option value="M">Masculin</option>
+                        <option value="F">Feminin</option>
+                    </select>
+                </div>
+                <div>
+                    <app-label for="nationalite">Nationalité</app-label>
+                    <app-input-field id="nationalite" name="nationalite" [(ngModel)]="enseignant.nationalite" />
+                </div>
+                <div>
+                    <app-label for="telephone">Téléphone</app-label>
+                    <app-input-field id="telephone" name="telephone" [(ngModel)]="enseignant.contact" />
+                </div>
+                <div>
+                    <app-label for="photo-upload">Photo</app-label>
+                    <input type="file" id="photo-upload" (change)="onPhotoFileSelected($event)" class="w-full rounded-md border border-stroke p-2 text-black dark:text-white">
+                    <small *ngIf="editMode && enseignant.photo" class="text-gray-500">Actuelle : {{ enseignant.photo }}. Laisser vide pour ne pas changer.</small>
+                </div>
+                <div>
+                    <app-label for="statut">Statut</app-label>
+                    <select id="statut" name="statut" [(ngModel)]="enseignant.statut"
+                            class="dark:bg-dark-900 h-[42px] w-full rounded-lg border
+                         border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs
+                          placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3
+                           focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900
+                            dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                    >
+                        <option value="Actif">Actif</option>
+                        <option value="Inactif">Inactif</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-4 mt-6">
+                <app-button type="submit" variant="primary">{{ editMode ? "Mettre à jour" : "Créer" }}</app-button>
+                <app-button *ngIf="editMode" (click)="resetForm()">Annuler</app-button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Table Section -->
+    <div class="rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+        <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div>
+                <h4 class="text-xl font-semibold text-black dark:text-white">Liste des Enseignants</h4>
+            </div>
+            <div class="relative">
+                 <input type="text" placeholder="Rechercher..." class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-none dark:border-gray-700 dark:text-white/90 xl:w-[300px]" [(ngModel)]="searchTerm" (ngModelChange)="onSearch()" name="search"/>
+            </div>
+        </div>
+
+        <div class="max-w-full overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="border-gray-100 border-y dark:border-white/[0.05]">
+                    <tr>
+                        <th class="py-3 pl-5 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Photo</th>
+                        <th class="py-3 px-4 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Nom</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Email</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Contact</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Sexe</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Date de Naissance</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Lieu de Naissance</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Nationalité</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Statut</th>
+                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                    <tr *ngFor="let ens of enseignants">
+                        <td class="py-4 pl-5 sm:pl-6">
+                            <img [src]="ens.photo ? 'http://localhost:8080/uploads/' + ens.photo : 'https://via.placeholder.com/40'" alt="Photo" class="h-10 w-10 rounded-full object-cover">
+                        </td>
+                        <td class="px-4 py-4"><h5 class="font-medium text-gray-700 dark:text-gray-400">{{ ens.nom }} {{ ens.prenom }}</h5></td>
+                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ens.email }}</td>
+                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ens.contact }}</td>
+                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ens.sexe }}</td>
+                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ens.dateNaissance | date: 'dd/MM/yyyy' }}</td>
+                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ens.lieuNaissance }}</td>
+                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ens.nationalite }}</td>
+                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">
+                            <span class="px-2 py-1 rounded-full text-xs" [ngClass]="ens.statut === 'Actif' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                                {{ ens.statut }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-4">
+                            <div class="flex items-center space-x-3.5">
+                                <button (click)="onEdit(ens)" class="font-medium text-brand-500 hover:text-brand-600">Modifier</button>
+                                <button (click)="onDelete(ens.id)" class="font-medium text-error-500 hover:text-error-600">Supprimer</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="enseignants.length === 0">
+                        <td colspan="10" class="py-10 text-center">Aucun enseignant trouvé.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
