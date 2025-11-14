@@ -17,6 +17,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/f
         [max]="max"
         [step]="step"
         [disabled]="disabled"
+        [required]="required"
+        [attr.pattern]="pattern ?? null"
         [ngClass]="inputClasses"
         (ngModelChange)="onChange($event)"
         (blur)="onTouched()"
@@ -55,12 +57,22 @@ export class InputFieldComponent implements ControlValueAccessor {
   @Input() error: boolean = false;
   @Input() hint?: string;
   @Input() className: string = '';
+  @Input()
+  set required(value: boolean | string) {
+    this._required = value === '' || value === true;
+  }
+  get required(): boolean {
+    return this._required;
+  }
+  @Input() pattern?: string;
 
   value: string | number = '';
   @Input() disabled: boolean = false;
 
   onChange: (value: any) => void = () => {};
   onTouched: () => void = () => {};
+
+  private _required = false;
 
   writeValue(value: any): void {
     this.value = value;

@@ -29,6 +29,7 @@ export class EnseignantComponent implements OnInit {
   editMode: boolean = false;
   searchTerm: string = '';
   selectedPhotoFile: File | null = null;
+  readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
 
   constructor(
     private service: EnseignantService,
@@ -68,6 +69,11 @@ export class EnseignantComponent implements OnInit {
   onSubmit(): void {
     if (!this.enseignant.nom || !this.enseignant.prenom || !this.enseignant.email) {
       this.notificationService.showWarning("Le nom, le prénom et l'email sont obligatoires.");
+      return;
+    }
+
+    if (!this.isValidEmail(this.enseignant.email)) {
+      this.notificationService.showWarning("Veuillez renseigner un email valide.");
       return;
     }
 
@@ -138,5 +144,9 @@ export class EnseignantComponent implements OnInit {
     this.editMode = false;
     const photoInput = document.getElementById('photo-upload') as HTMLInputElement;
     if (photoInput) photoInput.value = '';
+  }
+
+  private isValidEmail(email: string | null | undefined): boolean {
+    return !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 }

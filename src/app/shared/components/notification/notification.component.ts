@@ -19,8 +19,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.subscription = this.notificationService.notification$.subscribe(
       (notification) => {
         this.notifications.push(notification);
-        // Auto-dismiss after 10 seconds
-        setTimeout(() => this.close(notification), 10000);
+        // Auto-dismiss après la durée spécifiée ou 10 secondes par défaut
+        const duration = notification.duration || 10000;
+        setTimeout(() => this.close(notification), duration);
       }
     );
   }
@@ -30,10 +31,12 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   close(notification: Notification): void {
-    this.notifications = this.notifications.filter(n => n !== notification);
+    this.notifications = this.notifications.filter(n => n.id !== notification.id);
   }
 
-  // Method to get CSS classes based on notification type
+  /**
+   * Retourne les classes CSS appropriées selon le type de notification
+   */
   getNotificationClass(notification: Notification): string {
     switch (notification.type) {
       case 'success':
@@ -42,8 +45,28 @@ export class NotificationComponent implements OnInit, OnDestroy {
         return 'bg-yellow-100 border-yellow-400 text-yellow-700';
       case 'error':
         return 'bg-red-100 border-red-400 text-red-700';
+      case 'info':
+        return 'bg-blue-100 border-blue-400 text-blue-700';
       default:
         return 'bg-gray-100 border-gray-400 text-gray-700';
+    }
+  }
+
+  /**
+   * Retourne l'icône appropriée selon le type de notification
+   */
+  getNotificationIcon(notification: Notification): string {
+    switch (notification.type) {
+      case 'success':
+        return '✓';
+      case 'warning':
+        return '⚠';
+      case 'error':
+        return '✕';
+      case 'info':
+        return 'ℹ';
+      default:
+        return '•';
     }
   }
 }

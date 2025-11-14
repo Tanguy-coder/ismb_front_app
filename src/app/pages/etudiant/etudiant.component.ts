@@ -33,6 +33,7 @@ export class EtudiantComponent implements OnInit {
   editMode: boolean = false;
   searchTerm: string = '';
   selectedPhotoFile: File | null = null;
+  readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
 
   constructor(
     private service: EtudiantService,
@@ -84,6 +85,11 @@ export class EtudiantComponent implements OnInit {
       return;
     }
 
+    if (!this.isValidEmail(this.etudiant.email)) {
+      this.notificationService.showWarning("Veuillez renseigner un email valide.");
+      return;
+    }
+
     // Generate username
     if (this.etudiant.nom && this.etudiant.prenom) {
       this.etudiant.username = (this.etudiant.nom.charAt(0) + this.etudiant.prenom).toLowerCase();
@@ -113,7 +119,7 @@ export class EtudiantComponent implements OnInit {
 
     const successMessage = this.editMode
       ? "Étudiant mis à jour avec succès !"
-      : "Étudiant créé avec succès !";
+      : "Étudiant créé avec succès !"
 
     operation.subscribe({
       next: () => {
@@ -152,5 +158,9 @@ export class EtudiantComponent implements OnInit {
     this.editMode = false;
     const photoInput = document.getElementById('photo-upload') as HTMLInputElement;
     if (photoInput) photoInput.value = '';
+  }
+
+  private isValidEmail(email: string | null | undefined): boolean {
+    return !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 }

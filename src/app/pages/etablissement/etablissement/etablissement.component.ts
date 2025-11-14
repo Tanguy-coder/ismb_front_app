@@ -30,6 +30,7 @@ export class EtablissementComponent implements OnInit {
   searchTerm: string = '';
   selectedLogoFile: File | null = null;
   selectedImageFile: File | null = null;
+  readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
 
   constructor(
     private service: EtablissementService,
@@ -74,6 +75,11 @@ export class EtablissementComponent implements OnInit {
   onSubmit(): void {
     if (!this.etablissement.nom || !this.etablissement.email) {
       this.notificationService.showWarning("Le nom et l'email sont obligatoires.");
+      return;
+    }
+
+    if (!this.isValidEmail(this.etablissement.email)) {
+      this.notificationService.showWarning("Veuillez renseigner un email valide.");
       return;
     }
 
@@ -133,5 +139,9 @@ export class EtablissementComponent implements OnInit {
     if (logoInput) logoInput.value = '';
     const imageInput = document.getElementById('image-upload') as HTMLInputElement;
     if (imageInput) imageInput.value = '';
+  }
+
+  private isValidEmail(email: string | null | undefined): boolean {
+    return !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 }

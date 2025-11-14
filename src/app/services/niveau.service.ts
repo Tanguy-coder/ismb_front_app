@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Niveau } from "../models/niveau";
-import { catchError, Observable } from "rxjs";
-import { HandleErrorsService } from "./handle-errors.service";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -10,39 +9,26 @@ import { HandleErrorsService } from "./handle-errors.service";
 export class NiveauService {
   baseUrl: string = 'http://localhost:8080/api/niveaus'; 
 
-  constructor(
-      private http: HttpClient,
-      private errorHandler: HandleErrorsService
-  ) { }
+  constructor(private http: HttpClient) { }
 
   index(): Observable<Niveau[]> {
-    return this.http.get<Niveau[]>(this.baseUrl).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.get<Niveau[]>(this.baseUrl);
   }
 
   store(niveau: Niveau): Observable<Niveau> {
-    return this.http.post<Niveau>(this.baseUrl, niveau).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.post<Niveau>(this.baseUrl, niveau);
   }
 
   show(id: number): Observable<Niveau> {
-    return this.http.get<Niveau>(`${this.baseUrl}/${id}`).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.get<Niveau>(`${this.baseUrl}/${id}`);
   }
 
   update(id: number, niveau: Niveau): Observable<Niveau> {
     console.log(id, niveau);
-    return this.http.put<Niveau>(`${this.baseUrl}/${id}`, niveau).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.put<Niveau>(`${this.baseUrl}/${id}`, niveau);
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 }

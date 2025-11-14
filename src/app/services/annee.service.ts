@@ -1,47 +1,33 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {AnneeScolaire} from "../models/annee-scolaire";
-import {catchError, Observable} from "rxjs";
-import {HandleErrorsService} from "./handle-errors.service";
+import { HttpClient } from "@angular/common/http";
+import { AnneeScolaire } from "../models/annee-scolaire";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnneeService {
   baseUrl: string = 'http://localhost:8080/api/annees';
-  constructor(
-      private http: HttpClient,
-      private errorHandler: HandleErrorsService
-  ) { }
+  constructor(private http: HttpClient) { }
 
   index(): Observable<AnneeScolaire[]> {
-    return this.http.get<AnneeScolaire[]>(this.baseUrl).pipe(
-        catchError((error) =>this.errorHandler.handleError(error))
-    );
+    return this.http.get<AnneeScolaire[]>(this.baseUrl);
   }
 
   store(annee: AnneeScolaire): Observable<AnneeScolaire> {
-    return this.http.post<AnneeScolaire>(this.baseUrl, annee).pipe(
-        catchError((error) =>this.errorHandler.handleError(error))
-    );
+    return this.http.post<AnneeScolaire>(this.baseUrl, annee);
   }
 
-  show(id:number):Observable<AnneeScolaire> {
-    return this.http.get<AnneeScolaire>(`${this.baseUrl}/${id}`).pipe(
-        catchError((error) =>this.errorHandler.handleError(error))
-    );
+  show(id: number): Observable<AnneeScolaire> {
+    return this.http.get<AnneeScolaire>(`${this.baseUrl}/${id}`);
   }
 
-  update(id:number, annee:AnneeScolaire):Observable<AnneeScolaire> {
+  update(id: number, annee: AnneeScolaire): Observable<AnneeScolaire> {
     console.log(id, annee);
-    return this.http.put<AnneeScolaire>(`${this.baseUrl}/${id}`, annee).pipe(
-        catchError((error) =>this.errorHandler.handleError(error))
-    );
+    return this.http.put<AnneeScolaire>(`${this.baseUrl}/${id}`, annee);
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
-        catchError((error) =>this.errorHandler.handleError(error))
-    );
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 }

@@ -24,7 +24,7 @@
                 </div>
                 <div>
                     <app-label for="email">Email</app-label>
-                    <app-input-field id="email" name="email" type="email" [(ngModel)]="user.email" required />
+                    <app-input-field id="email" name="email" type="email" [(ngModel)]="user.email" required [pattern]="emailPattern" />
                 </div>
                 <div>
                     <app-label for="password">Mot de passe</app-label>

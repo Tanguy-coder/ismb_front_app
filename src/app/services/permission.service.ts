@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Permission } from "../models/permission";
-import { catchError, Observable } from "rxjs";
-import { HandleErrorsService } from "./handle-errors.service";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -10,38 +9,25 @@ import { HandleErrorsService } from "./handle-errors.service";
 export class PermissionService {
   baseUrl: string = 'http://localhost:8080/api/permissions';
 
-  constructor(
-      private http: HttpClient,
-      private errorHandler: HandleErrorsService
-  ) { }
+  constructor(private http: HttpClient) { }
 
   index(): Observable<Permission[]> {
-    return this.http.get<Permission[]>(this.baseUrl).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.get<Permission[]>(this.baseUrl);
   }
 
   store(permission: Permission): Observable<Permission> {
-    return this.http.post<Permission>(this.baseUrl, permission).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.post<Permission>(this.baseUrl, permission);
   }
 
   show(id: number): Observable<Permission> {
-    return this.http.get<Permission>(`${this.baseUrl}/${id}`).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.get<Permission>(`${this.baseUrl}/${id}`);
   }
 
   update(id: number, permission: Permission): Observable<Permission> {
-    return this.http.put<Permission>(`${this.baseUrl}/${id}`, permission).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.put<Permission>(`${this.baseUrl}/${id}`, permission);
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
-        catchError((error) => this.errorHandler.handleError(error))
-    );
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 }

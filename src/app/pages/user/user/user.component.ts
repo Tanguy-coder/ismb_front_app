@@ -25,6 +25,7 @@ export class UserComponent implements OnInit {
   roles: Role[] = [];
   public editMode: boolean = false;
   public searchTerm: string = '';
+  readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
 
   constructor(
       private service: UserService,
@@ -40,6 +41,10 @@ export class UserComponent implements OnInit {
   private validateForm(): boolean {
     if (!this.user.nom || !this.user.prenom || !this.user.username || !this.user.contact || !this.user.email || !this.user.roles) {
       this.notificationService.showWarning("Veuillez renseigner les champs obligatoires.");
+      return false;
+    }
+    if (!this.isValidEmail(this.user.email)) {
+      this.notificationService.showWarning("Veuillez renseigner un email valide.");
       return false;
     }
     if (!this.editMode && !this.user.password) {
@@ -134,5 +139,9 @@ export class UserComponent implements OnInit {
   resetForm(): void {
     this.user = { active: true };
     this.editMode = false;
+  }
+
+  private isValidEmail(email: string | null | undefined): boolean {
+    return !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 }
