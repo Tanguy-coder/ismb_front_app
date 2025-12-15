@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Note } from '../models/note';
 
@@ -8,7 +8,7 @@ import { Note } from '../models/note';
 })
 export class NoteService {
 
-  private apiUrl = 'http://localhost:8080/api/notes'; // replace with your API endpoint
+  private apiUrl = 'http://localhost:8080/api/notes'; // replace it with your API endpoint
 
   constructor(private http: HttpClient) { }
 
@@ -20,19 +20,34 @@ export class NoteService {
     return this.http.get<Note>(`${this.apiUrl}/${id}`);
   }
 
-  addNote(note: Note): Observable<Note> {
-    return this.http.post<Note>(this.apiUrl, note);
-  }
-
   addNotes(notes: Note[]): Observable<Note[]> {
-    return this.http.post<Note[]>(`${this.apiUrl}/bulk`, notes);
+    console.log(notes);
+    return this.http.post<Note[]>(this.apiUrl, notes);
   }
 
-  updateNote(id: number, note: Note): Observable<Note> {
-    return this.http.put<Note>(`${this.apiUrl}/${id}`, note);
+  updateNote(note: Note[]): Observable<Note> {
+    return this.http.put<Note>(`${this.apiUrl}`, note);
   }
 
   deleteNote(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // Retrieve notes with filters (annee, filiere, ue, session, periode)
+  searchNotes(filters: {
+    anneeId?: number;
+    filiereId?: number;
+    ueId?: number;
+    session?: string;
+    periode?: number;
+  }): Observable<Note[]> {
+    let params = new HttpParams();
+    if (filters.anneeId != null) params = params.set('anneeId', String(filters.anneeId));
+    if (filters.filiereId != null) params = params.set('filiereId', String(filters.filiereId));
+    if (filters.ueId != null) params = params.set('ueId', String(filters.ueId));
+    if (filters.session != null) params = params.set('session', filters.session);
+    if (filters.periode != null) params = params.set('periode', String(filters.periode));
+
+    return this.http.get<Note[]>(this.apiUrl, { params });
   }
 }

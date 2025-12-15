@@ -74,6 +74,7 @@
             <table class="min-w-full">
                 <thead class="border-gray-100 border-y dark:border-white/[0.05]">
                     <tr>
+                        <th class="py-3 pl-5 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Code</th>
                         <th class="py-3 pl-5 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Libellé</th>
                         <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Crédits</th>
                         <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Volume Horaire</th>
@@ -86,6 +87,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
                     <tr *ngFor="let ue of ues">
+                        <td class="px-4 py-4"><h5 class="font-medium text-gray-700 dark:text-gray-400">{{ ue.code }}</h5></td>
                         <td class="px-4 py-4"><h5 class="font-medium text-gray-700 dark:text-gray-400">{{ ue.libelle }}</h5></td>
                         <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ue.credits }}</td>
                         <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ue.volumeHoraire }}</td>

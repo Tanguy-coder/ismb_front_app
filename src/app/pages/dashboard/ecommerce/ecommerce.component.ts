@@ -1,21 +1,31 @@
-import { Component } from '@angular/core';
-import { EcommerceMetricsComponent } from '../../../shared/components/ecommerce/ecommerce-metrics/ecommerce-metrics.component';
-import { MonthlySalesChartComponent } from '../../../shared/components/ecommerce/monthly-sales-chart/monthly-sales-chart.component';
-import { MonthlyTargetComponent } from '../../../shared/components/ecommerce/monthly-target/monthly-target.component';
-import { StatisticsChartComponent } from '../../../shared/components/ecommerce/statics-chart/statics-chart.component';
-import { DemographicCardComponent } from '../../../shared/components/ecommerce/demographic-card/demographic-card.component';
-import { RecentOrdersComponent } from '../../../shared/components/ecommerce/recent-orders/recent-orders.component';
+import { Component, OnInit } from '@angular/core';
+import { EtudiantService } from '../../../services/etudiant.service';
+import { EnseignantService } from '../../../services/enseignant.service';
+import { FiliereService } from '../../../services/filiere.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-ecommerce',
-  imports: [
-    EcommerceMetricsComponent,
-    MonthlySalesChartComponent,
-    MonthlyTargetComponent,
-    StatisticsChartComponent,
-    DemographicCardComponent,
-    RecentOrdersComponent,
-  ],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './ecommerce.component.html',
 })
-export class EcommerceComponent {}
+export class EcommerceComponent implements OnInit {
+  stats = {
+    students: 0,
+    teachers: 0,
+    classes: 0
+  };
+
+  constructor(
+    private etudiantService: EtudiantService,
+    private enseignantService: EnseignantService,
+    private filiereService: FiliereService
+  ) { }
+
+  ngOnInit() {
+    this.etudiantService.index().subscribe(data => this.stats.students = data.length);
+    this.enseignantService.index().subscribe(data => this.stats.teachers = data.length);
+    this.filiereService.index().subscribe(data => this.stats.classes = data.length);
+  }
+}

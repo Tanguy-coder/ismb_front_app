@@ -7,6 +7,7 @@ export class Ue {
     id?: number;
     libelle!: string;
     credits!: number;
+    code!: string;
     filiere!: Filiere;
     volumeHoraire!: number;
     //notes?: Note[];

@@ -16,4 +16,5 @@ export interface Note {
   moyenne?: number;
   session?: string; // Normale ou rattrapage
   periode?: number; // harmattan ou mousson
+  mention?: string;
 }

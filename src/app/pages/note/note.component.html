@@ -15,43 +15,47 @@
 
   <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6 mb-6">
     <h3 class="font-medium text-black dark:text-white text-lg mb-4">Filtre</h3>
-    <form (ngSubmit)="getStudents()">
+    <form (ngSubmit)="onSubmit()" #noteForm="ngForm">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <app-label for="annee">Annee</app-label>
-          <select id="annee" name="annee" [(ngModel)]="filter.annee" class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
+          <app-label for="annee">Annee*</app-label>
+          <select id="annee" name="annee" [(ngModel)]="filter.annee" [compareWith]="compareById" class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
             <option *ngFor="let annee of annees" [ngValue]="annee">{{annee.code}}</option>
           </select>
         </div>
         <div>
-          <app-label for="filiere">Filiere</app-label>
-          <select id="filiere" name="filiere" [(ngModel)]="filter.filiere" class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
+          <app-label for="filiere">Filiere*</app-label>
+          <select id="filiere" name="filiere" [(ngModel)]="filter.filiere" [compareWith]="compareById" class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
             <option *ngFor="let filiere of filieres" [ngValue]="filiere">{{filiere.libelle}}</option>
           </select>
         </div>
         <div>
-          <app-label for="ue">UE</app-label>
-          <select id="ue" name="ue" [(ngModel)]="filter.ue" class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
+          <app-label for="ue">UE*</app-label>
+          <select id="ue" name="ue" [(ngModel)]="filter.ue" [compareWith]="compareById" class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
             <option *ngFor="let ue of ues" [ngValue]="ue">{{ue.libelle}}</option>
           </select>
         </div>
         <div>
-          <app-label for="session">Session</app-label>
+          <app-label for="session">Session*</app-label>
           <select id="session" name="session" [(ngModel)]="filter.session" class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
             <option value="Normale">Normale</option>
             <option value="Rattrapage">Rattrapage</option>
           </select>
         </div>
         <div>
-          <app-label for="periode">Periode</app-label>
+          <app-label for="periode">Periode*</app-label>
           <select id="periode" name="periode" [(ngModel)]="filter.periode" class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
             <option value="1">Harmattan</option>
             <option value="2">Mousson</option>
           </select>
         </div>
+          <div>
+              <app-label for="libelle">Code*</app-label>
+              <app-input-field id="libelle" name="libelle" [(ngModel)]="filter.code" required />
+          </div>
       </div>
       <div class="flex justify-end gap-4 mt-6">
-        <app-button type="submit" variant="primary">Afficher les etudiants</app-button>
+        <app-button type="submit" variant="primary">Soumettre</app-button>
       </div>
     </form>
   </div>
@@ -65,19 +69,37 @@
             <th class="py-3 px-4 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">CC</th>
             <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">TP</th>
             <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Examen</th>
+              <th *ngIf="activeView =='list'" class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Moyenne</th>
+              <th *ngIf="activeView =='list'" class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Appreciation</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
-          <tr *ngFor="let note of notesToSave; let i = index">
-            <td class="px-4 py-4"><h5 class="font-medium text-gray-700 dark:text-gray-400">{{note.etudiant?.prenom}} {{note.etudiant?.nom}}</h5></td>
-            <td class="px-4 py-4"><app-input-field type="number" [(ngModel)]="notesToSave[i].cc"></app-input-field></td>
-            <td class="px-4 py-4"><app-input-field type="number" [(ngModel)]="notesToSave[i].tp"></app-input-field></td>
-            <td class="px-4 py-4"><app-input-field type="number" [(ngModel)]="notesToSave[i].examen"></app-input-field></td>
-          </tr>
+          <!-- LIST MODE: read-only display of notes -->
+          <ng-container *ngIf="activeView === 'list'; else editAddRows">
+            <tr *ngFor="let note of notes; trackBy: trackByStudent">
+              <td class="px-4 py-4"><h5 class="font-medium text-gray-700 dark:text-gray-400">{{note.etudiant?.prenom}} {{note.etudiant?.nom}}</h5></td>
+              <td class="px-4 py-4">{{note.cc}}</td>
+              <td class="px-4 py-4">{{note.tp}}</td>
+              <td class="px-4 py-4">{{note.examen}}</td>
+                <td class="px-4 py-4">{{note.moyenne}}</td>
+                <td class="px-4 py-4">{{note.mention}}</td>
+            </tr>
+          </ng-container>
+
+          <!-- ADD/EDIT MODE: inputs -->
+          <ng-template #editAddRows>
+            <tr *ngFor="let note of notesToSave; let i = index; trackBy: trackByStudent">
+              <td class="px-4 py-4"><h5 class="font-medium text-gray-700 dark:text-gray-400">{{note.etudiant?.prenom}} {{note.etudiant?.nom}}</h5></td>
+              <td class="px-4 py-4"><app-input-field name="cc-{{i}}" type="number" [(ngModel)]="notesToSave[i].cc"></app-input-field></td>
+              <td class="px-4 py-4"><app-input-field name="tp-{{i}}" type="number" [(ngModel)]="notesToSave[i].tp"></app-input-field></td>
+              <td class="px-4 py-4"><app-input-field name="examen-{{i}}" type="number" [(ngModel)]="notesToSave[i].examen"></app-input-field></td>
+            </tr>
+          </ng-template>
         </tbody>
       </table>
       <div class="flex justify-end gap-4 mt-6 p-4">
-        <app-button (click)="saveNotes()" variant="primary">Enregistrer les notes</app-button>
+        <app-button *ngIf="activeView === 'add'" (click)="saveNotes()" variant="primary">Enregistrer les notes</app-button>
+        <app-button *ngIf="activeView === 'edit'" (click)="updateNotes()" variant="primary">Mettre à jour les notes</app-button>
       </div>
     </div>
   </div>

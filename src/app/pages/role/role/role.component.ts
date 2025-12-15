@@ -27,10 +27,10 @@ export class RoleComponent implements OnInit {
   public searchTerm: string = '';
 
   constructor(
-      private service: RoleService,
-      private permissionService: PermissionService,
-      private notificationService: NotificationService,
-  ) {}
+    private service: RoleService,
+    private permissionService: PermissionService,
+    private notificationService: NotificationService,
+  ) { }
 
   ngOnInit() {
     this.getRoles();
@@ -69,7 +69,7 @@ export class RoleComponent implements OnInit {
       return;
     }
     this.roles = this.allRoles.filter(role =>
-        role.name && role.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+      role.name && role.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
@@ -79,12 +79,12 @@ export class RoleComponent implements OnInit {
     }
 
     const operation = this.editMode
-        ? this.service.update(this.role.id!, this.role)
-        : this.service.store(this.role);
+      ? this.service.update(this.role.id!, this.role)
+      : this.service.store(this.role);
 
     const successMessage = this.editMode
-        ? "Rôle mis à jour avec succès !"
-        : "Rôle créé avec succès !";
+      ? "Rôle mis à jour avec succès !"
+      : "Rôle créé avec succès !";
 
     operation.subscribe({
       next: () => {
@@ -126,11 +126,17 @@ export class RoleComponent implements OnInit {
     if (event.target.checked) {
       this.role.permissions?.push(permission);
     } else {
-      this.role.permissions = this.role.permissions?.filter(p => p.id !== permission.id);
+      this.role.permissions = this.role.permissions?.filter(p => {
+        if (p.id && permission.id) return p.id !== permission.id;
+        return p.name !== permission.name;
+      });
     }
   }
 
   isPermissionSelected(permission: Permission): boolean {
-    return this.role.permissions?.some(p => p.id === permission.id) || false;
+    return this.role.permissions?.some(p => {
+      if (p.id && permission.id) return p.id === permission.id;
+      return p.name === permission.name;
+    }) || false;
   }
 }
