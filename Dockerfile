@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Install dependencies using clean, reproducible install
 COPY package*.json ./
-RUN npm ci --legacy-peer-deps
+RUN npm ci --legacy-peer-deps || npm i --legacy-peer-deps
 
 # Copy sources and build
 COPY . .

@@ -24,7 +24,7 @@ build_app:
     NPM_CONFIG_PRODUCTION: "false"
     NODE_ENV: development
   before_script:
-    - npm ci --legacy-peer-deps
+    - npm ci --legacy-peer-deps || npm i --legacy-peer-deps
   script:
     - npm run build
   artifacts:

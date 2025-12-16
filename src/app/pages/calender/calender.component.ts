@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 
 import { Component, ViewChild } from '@angular/core';
-import { EventInput, CalendarOptions, DateSelectArg, EventClickArg } from '@fullcalendar/core';
+import { EventInput, CalendarOptions, DateSelectArg, EventClickArg, EventContentArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -80,15 +80,15 @@ export class CalenderComponent {
       },
       selectable: true,
       events: this.events,
-      select: (info) => this.handleDateSelect(info),
-      eventClick: (info) => this.handleEventClick(info),
+      select: (info: DateSelectArg) => this.handleDateSelect(info),
+      eventClick: (info: EventClickArg) => this.handleEventClick(info),
       customButtons: {
         addEventButton: {
           text: 'Add Event +',
           click: () => this.openModal()
         }
       },
-      eventContent: (arg) => this.renderEventContent(arg)
+      eventContent: (arg: EventContentArg) => this.renderEventContent(arg)
     };
   }
 
@@ -161,7 +161,7 @@ export class CalenderComponent {
     this.resetModalFields();
   }
 
-  renderEventContent(eventInfo: any) {
+  renderEventContent(eventInfo: EventContentArg) {
     const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar?.toLowerCase()}`;
     return {
       html: `
