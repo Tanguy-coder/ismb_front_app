@@ -106,12 +106,12 @@ export class CalenderComponent {
       title: event.title,
       start: event.startStr,
       end: event.endStr,
-      extendedProps: { calendar: event.extendedProps.calendar }
+      extendedProps: { calendar: (event.extendedProps['calendar'] as string | undefined) ?? '' }
     };
     this.eventTitle = event.title;
     this.eventStartDate = event.startStr;
     this.eventEndDate = event.endStr || '';
-    this.eventLevel = event.extendedProps.calendar;
+    this.eventLevel = (event.extendedProps['calendar'] as string | undefined) ?? '';
     this.openModal();
   }
 
@@ -162,7 +162,7 @@ export class CalenderComponent {
   }
 
   renderEventContent(eventInfo: EventContentArg) {
-    const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar?.toLowerCase()}`;
+    const colorClass = `fc-bg-${(eventInfo.event.extendedProps['calendar'] as string | undefined)?.toLowerCase()}`;
     return {
       html: `
         <div class="event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm">
