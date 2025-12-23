@@ -25,8 +25,8 @@ RUN rm -rf /usr/share/nginx/html/*
 # Copy custom nginx config (SPA routing)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy build artifacts
-COPY --from=build /app/dist/ng-tailadmin/ /usr/share/nginx/html/
+# Copy build artifacts (Angular 20+ uses browser/ subfolder)
+COPY --from=build /app/dist/ng-tailadmin/browser/ /usr/share/nginx/html/
 
 EXPOSE 80
 
