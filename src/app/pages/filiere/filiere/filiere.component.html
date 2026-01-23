@@ -64,10 +64,27 @@
     </div>
 
     <!-- Table Section -->
+    <div class="rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03] mb-6">
+      <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <h4 class="text-xl font-semibold text-black dark:text-white">Liste des Filières</h4>
+        <div class="flex items-center gap-3">
+          <app-label class="whitespace-nowrap">Année Académique :</app-label>
+          <select
+            [(ngModel)]="selectedAnneeScolaire"
+            (ngModelChange)="onAnneeScolaireChange()"
+            class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 min-w-[200px]"
+          >
+            <option [ngValue]="undefined">Toutes les années</option>
+            <option *ngFor="let annee of anneesScolaires" [ngValue]="annee">{{ annee.code }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <app-datatable
       [data]="filieres"
       [columns]="columns"
-      title="Liste des Filières"
+      title=""
       fileName="filieres"
       [showExportButtons]="true"
       [pageSize]="10"

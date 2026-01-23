@@ -29,6 +29,8 @@ export class EnseignantComponent implements OnInit {
   enseignants: Enseignant[] = [];
   editMode: boolean = false;
   selectedPhotoFile: File | null = null;
+  photoPreviewUrl: string | null = null;
+  private readonly uploadsBaseUrl = 'http://localhost:8080/uploads/';
   readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
 
   columns: DataTableColumn[] = [
@@ -89,6 +91,11 @@ export class EnseignantComponent implements OnInit {
   onPhotoFileSelected(event: Event): void {
     const element = event.currentTarget as HTMLInputElement;
     this.selectedPhotoFile = element.files ? element.files[0] : null;
+
+    if (this.photoPreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.photoPreviewUrl);
+    }
+    this.photoPreviewUrl = this.selectedPhotoFile ? URL.createObjectURL(this.selectedPhotoFile) : null;
   }
 
   getEnseignants(): void {
@@ -152,6 +159,12 @@ export class EnseignantComponent implements OnInit {
   onEdit(enseignant: Enseignant): void {
     this.editMode = true;
     this.enseignant = { ...enseignant };
+
+    if (this.photoPreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.photoPreviewUrl);
+    }
+    this.selectedPhotoFile = null;
+    this.photoPreviewUrl = this.enseignant.photo ? `${this.uploadsBaseUrl}${this.enseignant.photo}` : null;
   }
 
   onDelete(enseignant: Enseignant): void {
@@ -166,12 +179,16 @@ export class EnseignantComponent implements OnInit {
   }
 
   resetForm(): void {
+    if (this.photoPreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.photoPreviewUrl);
+    }
     this.enseignant = new Enseignant();
     this.enseignant.password = 'ens1234';
     this.enseignant.roles = [{ id: 3, name: 'Teacher' }]; // Assuming Role has id and name properties
     this.enseignant.isActive = true;
     this.enseignant.statut = 'Actif'; // Default to 'Actif'
     this.selectedPhotoFile = null;
+    this.photoPreviewUrl = null;
     this.editMode = false;
     const photoInput = document.getElementById('photo-upload') as HTMLInputElement;
     if (photoInput) photoInput.value = '';

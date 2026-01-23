@@ -52,6 +52,9 @@
                     <app-label for="photo-upload">Photo</app-label>
                     <input type="file" id="photo-upload" (change)="onPhotoFileSelected($event)" class="w-full rounded-md border border-stroke p-2 text-black dark:text-white">
                     <small *ngIf="editMode && enseignant.photo" class="text-gray-500">Actuelle : {{ enseignant.photo }}. Laisser vide pour ne pas changer.</small>
+                    <div *ngIf="photoPreviewUrl" class="mt-2">
+                        <img [src]="photoPreviewUrl" alt="Prévisualisation" class="h-20 w-20 rounded-lg object-cover border border-gray-200 dark:border-gray-700" />
+                    </div>
                 </div>
                 <div>
                     <app-label for="statut">Statut</app-label>

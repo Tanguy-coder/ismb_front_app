@@ -11,6 +11,8 @@ import { ButtonComponent } from "../../../shared/components/ui/button/button.com
 import { Niveau } from '../../../models/niveau';
 import { NiveauService } from '../../../services/niveau.service';
 import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
+import { AnneeScolaire } from '../../../models/annee-scolaire';
+import { AnneeService } from '../../../services/annee.service';
 
 @Component({
   selector: 'app-filiere',
@@ -22,25 +24,38 @@ import { DataTableComponent, DataTableColumn } from '../../../shared/components/
 export class FiliereComponent implements OnInit {
   filiere: Filiere = new Filiere();
   filieres: Filiere[] = [];
+  allFilieres: Filiere[] = [];
   niveaux: Niveau[] = [];
+  anneesScolaires: AnneeScolaire[] = [];
+  selectedAnneeScolaire: AnneeScolaire | undefined = undefined;
   public editMode: boolean = false;
 
   columns: DataTableColumn[] = [
     { key: 'libelle', label: 'Libellé', sortable: true },
     { key: 'description', label: 'Description', sortable: false },
     { key: 'niveau.libelle', label: 'Niveau', sortable: true },
+    { 
+      key: 'anneeScolaire', 
+      label: 'Année Académique', 
+      sortable: true,
+      render: (value: any, row: any) => {
+        return row.anneeScolaire?.code || 'Non définie';
+      }
+    },
     { key: 'actions', label: 'Actions', sortable: false, isAction: true }
   ];
 
   constructor(
       private service: FiliereService,
       private niveauService: NiveauService,
+      private anneeService: AnneeService,
       private notificationService: NotificationService,
   ) {}
 
   ngOnInit() {
     this.getFilieres();
     this.getNiveaux();
+    this.getAnneesScolaires();
   }
 
   private validateForm(): boolean {
@@ -54,7 +69,8 @@ export class FiliereComponent implements OnInit {
   getFilieres(): void {
     this.service.index().subscribe({
       next: (response: Filiere[]) => {
-        this.filieres = response;
+        this.allFilieres = response;
+        this.applyAnneeFilter();
       }
     });
   }
@@ -65,6 +81,28 @@ export class FiliereComponent implements OnInit {
         this.niveaux = response;
       }
     });
+  }
+
+  getAnneesScolaires(): void {
+    this.anneeService.index().subscribe({
+      next: (response: AnneeScolaire[]) => {
+        this.anneesScolaires = response;
+      }
+    });
+  }
+
+  onAnneeScolaireChange(): void {
+    this.applyAnneeFilter();
+  }
+
+  private applyAnneeFilter(): void {
+    if (!this.selectedAnneeScolaire) {
+      this.filieres = this.allFilieres;
+    } else {
+      this.filieres = this.allFilieres.filter(f => 
+        f.anneeScolaire?.id === this.selectedAnneeScolaire?.id
+      );
+    }
   }
 
 

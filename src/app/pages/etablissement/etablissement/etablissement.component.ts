@@ -30,6 +30,9 @@ export class EtablissementComponent implements OnInit {
   editMode: boolean = false;
   selectedLogoFile: File | null = null;
   selectedImageFile: File | null = null;
+  logoPreviewUrl: string | null = null;
+  imagePreviewUrl: string | null = null;
+  private readonly uploadsBaseUrl = 'http://localhost:8080/uploads/';
   readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
 
   columns: DataTableColumn[] = [
@@ -61,11 +64,21 @@ export class EtablissementComponent implements OnInit {
   onLogoFileSelected(event: Event): void {
     const element = event.currentTarget as HTMLInputElement;
     this.selectedLogoFile = element.files ? element.files[0] : null;
+
+    if (this.logoPreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.logoPreviewUrl);
+    }
+    this.logoPreviewUrl = this.selectedLogoFile ? URL.createObjectURL(this.selectedLogoFile) : null;
   }
 
   onImageFileSelected(event: Event): void {
     const element = event.currentTarget as HTMLInputElement;
     this.selectedImageFile = element.files ? element.files[0] : null;
+
+    if (this.imagePreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.imagePreviewUrl);
+    }
+    this.imagePreviewUrl = this.selectedImageFile ? URL.createObjectURL(this.selectedImageFile) : null;
   }
 
   getEtablissements(): void {
@@ -119,6 +132,14 @@ export class EtablissementComponent implements OnInit {
   onEdit(etablissement: Etablissement): void {
     this.editMode = true;
     this.etablissement = { ...etablissement };
+
+    // Prévisualisation: fichiers actuels
+    if (this.logoPreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(this.logoPreviewUrl);
+    if (this.imagePreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(this.imagePreviewUrl);
+    this.selectedLogoFile = null;
+    this.selectedImageFile = null;
+    this.logoPreviewUrl = this.etablissement.logo ? `${this.uploadsBaseUrl}${this.etablissement.logo}` : null;
+    this.imagePreviewUrl = this.etablissement.image ? `${this.uploadsBaseUrl}${this.etablissement.image}` : null;
   }
 
   onDelete(etablissement: Etablissement): void {
@@ -133,9 +154,13 @@ export class EtablissementComponent implements OnInit {
   }
 
   resetForm(): void {
+    if (this.logoPreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(this.logoPreviewUrl);
+    if (this.imagePreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(this.imagePreviewUrl);
     this.etablissement = new Etablissement();
     this.selectedLogoFile = null;
     this.selectedImageFile = null;
+    this.logoPreviewUrl = null;
+    this.imagePreviewUrl = null;
     this.editMode = false;
     const logoInput = document.getElementById('logo-upload') as HTMLInputElement;
     if (logoInput) logoInput.value = '';

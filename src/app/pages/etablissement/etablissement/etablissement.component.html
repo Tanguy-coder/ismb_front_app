@@ -26,11 +26,17 @@
                     <app-label for="logo-upload">Logo</app-label>
                     <input type="file" id="logo-upload" (change)="onLogoFileSelected($event)" class="w-full rounded-md border border-stroke p-2 text-black dark:text-white">
                     <small *ngIf="editMode && etablissement.logo" class="text-gray-500">Actuel : {{ etablissement.logo }}. Laisser vide pour ne pas changer.</small>
+                    <div *ngIf="logoPreviewUrl" class="mt-2">
+                        <img [src]="logoPreviewUrl" alt="Prévisualisation logo" class="h-20 w-20 rounded-lg object-cover border border-gray-200 dark:border-gray-700" />
+                    </div>
                 </div>
                 <div>
                     <app-label for="image-upload">Image</app-label>
                     <input type="file" id="image-upload" (change)="onImageFileSelected($event)" class="w-full rounded-md border border-stroke p-2 text-black dark:text-white">
                     <small *ngIf="editMode && etablissement.image" class="text-gray-500">Actuelle : {{ etablissement.image }}. Laisser vide pour ne pas changer.</small>
+                    <div *ngIf="imagePreviewUrl" class="mt-2">
+                        <img [src]="imagePreviewUrl" alt="Prévisualisation image" class="h-28 w-full max-w-[320px] rounded-lg object-cover border border-gray-200 dark:border-gray-700" />
+                    </div>
                 </div>
             </div>
 
