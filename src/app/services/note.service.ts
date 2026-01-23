@@ -8,7 +8,7 @@ import { Note } from '../models/note';
 })
 export class NoteService {
 
-  private apiUrl = 'http://localhost:8080/api/notes'; // replace it with your API endpoint
+  private apiUrl = '/api/notes'; // replace it with your API endpoint
 
   constructor(private http: HttpClient) { }
 

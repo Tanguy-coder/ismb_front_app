@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
   providedIn: 'root'
 })
 export class PermissionService {
-  baseUrl: string = 'http://localhost:8080/api/permissions';
+  baseUrl: string = '/api/permissions';
 
   constructor(private http: HttpClient) { }
 

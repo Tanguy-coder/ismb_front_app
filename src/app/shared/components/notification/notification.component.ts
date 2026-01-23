@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Notification, NotificationService } from '../../../services/notification.service';
 import { CommonModule } from '@angular/common';
@@ -13,12 +13,18 @@ export class NotificationComponent implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   private subscription: Subscription = new Subscription();
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(
+    private notificationService: NotificationService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.subscription = this.notificationService.notification$.subscribe(
       (notification) => {
-        this.notifications.push(notification);
+        // Créer un nouveau tableau pour forcer la détection de changement
+        this.notifications = [...this.notifications, notification];
+        // Forcer la détection de changement immédiatement
+        this.cdr.detectChanges();
         // Auto-dismiss après la durée spécifiée ou 10 secondes par défaut
         const duration = notification.duration || 10000;
         setTimeout(() => this.close(notification), duration);
@@ -32,6 +38,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   close(notification: Notification): void {
     this.notifications = this.notifications.filter(n => n.id !== notification.id);
+    // Forcer la détection de changement après suppression
+    this.cdr.detectChanges();
   }
 
   /**

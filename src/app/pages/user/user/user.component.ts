@@ -10,6 +10,7 @@ import { LabelComponent } from "../../../shared/components/form/label/label.comp
 import { ButtonComponent } from "../../../shared/components/ui/button/button.component";
 import { Role } from '../../../models/role';
 import { RoleService } from '../../../services/role.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user',
@@ -102,14 +103,21 @@ export class UserComponent implements OnInit {
         : "Utilisateur créé avec succès !";
 
     operation.subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('User operation successful:', response);
+        // Afficher la notification immédiatement
         this.notificationService.showSuccess(successMessage);
-        this.getUsers();
-        this.resetForm();
+        // Utiliser setTimeout pour s'assurer que la notification est affichée avant les autres opérations
+        setTimeout(() => {
+          this.getUsers();
+          this.resetForm();
+        }, 50);
       },
       error: (err) => {
         console.error('Error during user submission:', err);
-        this.notificationService.showError('Une erreur est survenue.');
+        // Afficher une notification d'erreur avec plus de détails
+        const errorMessage = err?.message || err?.error?.message || 'Une erreur est survenue.';
+        this.notificationService.showError(errorMessage);
       }
     });
   }

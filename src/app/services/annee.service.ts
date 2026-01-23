@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
   providedIn: 'root'
 })
 export class AnneeService {
-  baseUrl: string = 'http://localhost:8080/api/annees';
+  baseUrl: string = '/api/annees';
   constructor(private http: HttpClient) { }
 
   index(): Observable<AnneeScolaire[]> {

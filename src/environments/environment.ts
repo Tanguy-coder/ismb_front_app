@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api'
+  apiUrl: '/api'  // URL relative - nginx fera le proxy vers le backend
 };
 

@@ -7,7 +7,7 @@ import { Enseignant } from "../models/enseignant";
   providedIn: 'root'
 })
 export class EnseignantService {
-  private baseUrl = "http://localhost:8080/api/enseignants";
+  private baseUrl = "/api/enseignants";
 
   constructor(private http: HttpClient) { }
 

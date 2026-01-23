@@ -7,7 +7,7 @@ import { Ue } from "../models/ue";
   providedIn: 'root'
 })
 export class UeService {
-  private baseUrl = "http://localhost:8080/api/ues";
+  private baseUrl = "/api/ues";
 
   constructor(private http: HttpClient) { }
 

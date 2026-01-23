@@ -79,6 +79,6 @@ export class NotificationService {
    * Génère un ID unique pour chaque notification
    */
   private generateId(): string {
-    return `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `notification-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
   }
 }

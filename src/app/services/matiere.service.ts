@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
   providedIn: 'root'
 })
 export class MatiereService {
-  baseUrl: string = 'http://localhost:8080/api/matieres';
+  baseUrl: string = '/api/matieres';
 
   constructor(private http: HttpClient) { }
 

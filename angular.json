@@ -68,7 +68,8 @@
               "buildTarget": "ng-tailadmin:build:production"
             },
             "development": {
-              "buildTarget": "ng-tailadmin:build:development"
+              "buildTarget": "ng-tailadmin:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

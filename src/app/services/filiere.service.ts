@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
   providedIn: 'root'
 })
 export class FiliereService {
-  baseUrl: string = 'http://localhost:8080/api/filieres';
+  baseUrl: string = '/api/filieres';
 
   constructor(private http: HttpClient) { }
 
