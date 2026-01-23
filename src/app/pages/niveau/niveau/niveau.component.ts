@@ -8,20 +8,24 @@ import { NotificationService } from "../../../services/notification.service";
 import { InputFieldComponent } from "../../../shared/components/form/input/input-field.component";
 import { LabelComponent } from "../../../shared/components/form/label/label.component";
 import { ButtonComponent } from "../../../shared/components/ui/button/button.component";
+import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-niveau',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent],
+  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent, DataTableComponent],
   templateUrl: './niveau.component.html',
   styleUrl: './niveau.component.css'
 })
 export class NiveauComponent implements OnInit {
   niveau: Niveau = new Niveau();
   niveaux: Niveau[] = [];
-  allNiveaux: Niveau[] = []; // To hold the original list
   public editMode: boolean = false;
-  public searchTerm: string = '';
+
+  columns: DataTableColumn[] = [
+    { key: 'libelle', label: 'Libellé', sortable: true },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+  ];
 
   constructor(
       private service: NiveauService,
@@ -43,20 +47,9 @@ export class NiveauComponent implements OnInit {
   getNiveaux(): void {
     this.service.index().subscribe({
       next: (response: Niveau[]) => {
-        this.allNiveaux = response;
         this.niveaux = response;
       }
     });
-  }
-
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.niveaux = this.allNiveaux;
-      return;
-    }
-    this.niveaux = this.allNiveaux.filter(niveau =>
-        niveau.libelle && niveau.libelle.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
   }
 
   onSubmit(): void {
@@ -86,10 +79,10 @@ export class NiveauComponent implements OnInit {
     this.niveau = { ...niveau };
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
+  onDelete(niveau: Niveau): void {
+    if (niveau.id === undefined) return;
     if (confirm("Voulez-vous vraiment supprimer ce niveau ?")) {
-      this.service.delete(id).subscribe({
+      this.service.delete(niveau.id).subscribe({
         next: () => {
           this.notificationService.showSuccess("Niveau supprimé avec succès !");
           this.getNiveaux();

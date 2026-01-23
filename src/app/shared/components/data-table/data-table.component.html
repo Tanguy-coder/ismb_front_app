@@ -1,0 +1,43 @@
+<div class="rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+  <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <div>
+      <h4 class="text-xl font-semibold text-black dark:text-white">{{ title }}</h4>
+    </div>
+    <div class="flex items-center gap-2" *ngIf="showExport">
+      <app-button 
+        (click)="exportToExcel()" 
+        variant="outline" 
+        size="sm"
+        class="flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Excel
+      </app-button>
+      <app-button 
+        (click)="exportToPDF()" 
+        variant="outline" 
+        size="sm"
+        class="flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+        </svg>
+        PDF
+      </app-button>
+    </div>
+  </div>
+
+  <div class="max-w-full overflow-x-auto px-5 pb-4">
+    <table #dataTable class="display nowrap" style="width:100%">
+      <thead>
+        <tr>
+          <th *ngFor="let col of columns">{{ col.label }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- DataTables gérera le contenu dynamiquement -->
+      </tbody>
+    </table>
+  </div>
+</div>
+

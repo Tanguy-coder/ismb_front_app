@@ -10,21 +10,36 @@ import { LabelComponent } from "../../../shared/components/form/label/label.comp
 import { ButtonComponent } from "../../../shared/components/ui/button/button.component";
 import { Permission } from '../../../models/permission';
 import { PermissionService } from '../../../services/permission.service';
+import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-role',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent],
+  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent, DataTableComponent],
   templateUrl: './role.component.html',
   styleUrl: './role.component.css'
 })
 export class RoleComponent implements OnInit {
   role: Role = new Role();
   roles: Role[] = [];
-  allRoles: Role[] = [];
   permissions: Permission[] = [];
   public editMode: boolean = false;
-  public searchTerm: string = '';
+
+  columns: DataTableColumn[] = [
+    { key: 'name', label: 'Nom', sortable: true },
+    { 
+      key: 'permissions', 
+      label: 'Permissions', 
+      sortable: false,
+      render: (value: any, row: any) => {
+        if (!row.permissions || row.permissions.length === 0) return '';
+        return row.permissions.map((p: any) => 
+          `<span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">${p.name}</span>`
+        ).join('');
+      }
+    },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+  ];
 
   constructor(
     private service: RoleService,
@@ -49,7 +64,6 @@ export class RoleComponent implements OnInit {
   getRoles(): void {
     this.service.index().subscribe({
       next: (response: Role[]) => {
-        this.allRoles = response;
         this.roles = response;
       }
     });
@@ -61,16 +75,6 @@ export class RoleComponent implements OnInit {
         this.permissions = response;
       }
     });
-  }
-
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.roles = this.allRoles;
-      return;
-    }
-    this.roles = this.allRoles.filter(role =>
-      role.name && role.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
   }
 
   onSubmit(): void {
@@ -103,17 +107,15 @@ export class RoleComponent implements OnInit {
     }
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
-    if (confirm("Voulez-vous vraiment supprimer ce rôle ?")) {
-      this.service.delete(id).subscribe({
-        next: () => {
-          this.notificationService.showSuccess("Rôle supprimé avec succès !");
-          this.getRoles();
-          this.resetForm();
-        }
-      });
-    }
+  onDelete(role: Role): void {
+    if (role.id === undefined) return;
+    this.service.delete(role.id).subscribe({
+      next: () => {
+        this.notificationService.showSuccess("Rôle supprimé avec succès !");
+        this.getRoles();
+        this.resetForm();
+      }
+    });
   }
 
   resetForm(): void {

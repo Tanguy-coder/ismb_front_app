@@ -101,67 +101,14 @@
     </div>
 
     <!-- Table Section -->
-    <div class="rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
-        <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-            <div>
-                <h4 class="text-xl font-semibold text-black dark:text-white">Liste des Étudiants</h4>
-            </div>
-            <div class="relative">
-                 <input type="text" placeholder="Rechercher..." class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-none dark:border-gray-700 dark:text-white/90 xl:w-[300px]" [(ngModel)]="searchTerm" (ngModelChange)="onSearch()" name="search"/>
-            </div>
-        </div>
-
-        <div class="max-w-full overflow-x-auto">
-            <table class="min-w-full">
-                <thead class="border-gray-100 border-y dark:border-white/[0.05]">
-                    <tr>
-                        <th class="py-3 pl-5 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Photo</th>
-                        <th class="py-3 px-4 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Nom</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Email</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Contact</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Sexe</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Date de Naissance</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Lieu de Naissance</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Nationalité</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Filière</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Statut</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                    <tr *ngFor="let etud of etudiants">
-                        <td class="py-4 pl-5 sm:pl-6">
-                            <img [src]="etud.photo ? 'http://localhost:8080/uploads/' + etud.photo : 'https://via.placeholder.com/40'" alt="Photo" class="h-10 w-10 rounded-full object-cover">
-                        </td>
-                        <td class="px-4 py-4"><h5 class="font-medium text-gray-700 dark:text-gray-400">{{ etud.nom }} {{ etud.prenom }}</h5></td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ etud.email }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ etud.contact }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ etud.sexe }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ etud.dateNaissance | date: 'dd/MM/yyyy' }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ etud.lieuNaissance }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ etud.nationalite }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ etud.filiere?.libelle }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">
-                            <span class="px-2 py-1 rounded-full text-xs"
-                                [ngClass]="{
-                                    'bg-green-100 text-green-800': etud.statut === 'Nouveau',
-                                    'bg-yellow-100 text-yellow-800': etud.statut === 'Doublant'
-                                }">
-                                {{ etud.statut }}
-                            </span>
-                        </td>
-                        <td class="px-4 py-4">
-                            <div class="flex items-center space-x-3.5">
-                                <button (click)="onEdit(etud)" class="font-medium text-brand-500 hover:text-brand-600">Modifier</button>
-                                <button (click)="onDelete(etud.id)" class="font-medium text-error-500 hover:text-error-600">Supprimer</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr *ngIf="etudiants.length === 0">
-                        <td colspan="11" class="py-10 text-center">Aucun étudiant trouvé.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <app-datatable
+      [data]="etudiants"
+      [columns]="columns"
+      title="Liste des Étudiants"
+      fileName="etudiants"
+      [showExportButtons]="true"
+      [pageSize]="10"
+      (onEdit)="onEdit($event)"
+      (onDelete)="onDelete($event)">
+    </app-datatable>
 </div>

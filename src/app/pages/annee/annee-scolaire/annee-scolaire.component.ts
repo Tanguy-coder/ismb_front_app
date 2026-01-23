@@ -6,8 +6,9 @@ import { PageBreadcrumbComponent } from "../../../shared/components/common/page-
 import { AnneeScolaire } from "../../../models/annee-scolaire";
 import { AnneeService } from "../../../services/annee.service";
 import { ButtonComponent } from "../../../shared/components/ui/button/button.component";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { NotificationService } from "../../../services/notification.service";
+import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-annee-scolaire',
@@ -18,7 +19,9 @@ import { NotificationService } from "../../../services/notification.service";
     LabelComponent,
     PageBreadcrumbComponent,
     ButtonComponent,
-    CommonModule
+    CommonModule,
+    DataTableComponent,
+    DatePipe
   ],
   templateUrl: './annee-scolaire.component.html',
   styles: ``
@@ -26,9 +29,32 @@ import { NotificationService } from "../../../services/notification.service";
 export class AnneeScolaireComponent implements OnInit {
     annee: AnneeScolaire = new AnneeScolaire();
     annees: AnneeScolaire[] = [];
-    allAnnees: AnneeScolaire[] = []; // To hold the original list
     public editMode: boolean = false;
-    public searchTerm: string = '';
+
+    columns: DataTableColumn[] = [
+      { key: 'code', label: 'Code', sortable: true },
+      { 
+        key: 'dateDebut', 
+        label: 'Date Début', 
+        sortable: true,
+        render: (value: any) => {
+          if (!value) return '';
+          const date = new Date(value);
+          return date.toLocaleDateString('fr-FR');
+        }
+      },
+      { 
+        key: 'dateFin', 
+        label: 'Date Fin', 
+        sortable: true,
+        render: (value: any) => {
+          if (!value) return '';
+          const date = new Date(value);
+          return date.toLocaleDateString('fr-FR');
+        }
+      },
+      { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+    ];
 
     constructor(
         private service: AnneeService,
@@ -50,21 +76,10 @@ export class AnneeScolaireComponent implements OnInit {
     getAnnees(): void {
         this.service.index().subscribe({
             next: (response: AnneeScolaire[]) => {
-                this.allAnnees = response;
                 this.annees = response;
             }
             // Les erreurs sont gérées globalement par HandleErrorsService
         });
-    }
-
-    onSearch(): void {
-        if (!this.searchTerm) {
-            this.annees = this.allAnnees;
-            return;
-        }
-        this.annees = this.allAnnees.filter(annee =>
-            annee.code && annee.code.toLowerCase().includes(this.searchTerm.toLowerCase())
-        );
     }
 
     onSubmit(): void {
@@ -94,17 +109,15 @@ export class AnneeScolaireComponent implements OnInit {
         this.annee = { ...annee }; // Use spread operator for a clean copy
     }
 
-    onDelete(id: number | undefined): void {
-        if (id === undefined) return;
-        if (confirm("Voulez-vous vraiment supprimer cette année scolaire ?")) {
-            this.service.delete(id).subscribe({
-                next: () => {
-                    this.notificationService.showSuccess("Année scolaire supprimée avec succès !");
-                    this.getAnnees();
-                    this.resetForm(); // Also reset form in case the deleted item was being edited
-                }
-            });
-        }
+    onDelete(annee: AnneeScolaire): void {
+        if (annee.id === undefined) return;
+        this.service.delete(annee.id).subscribe({
+            next: () => {
+                this.notificationService.showSuccess("Année scolaire supprimée avec succès !");
+                this.getAnnees();
+                this.resetForm(); // Also reset form in case the deleted item was being edited
+            }
+        });
     }
 
     resetForm(): void {

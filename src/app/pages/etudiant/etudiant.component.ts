@@ -6,11 +6,12 @@ import { PageBreadcrumbComponent } from "../../shared/components/common/page-bre
 import { Etudiant } from "../../models/etudiant";
 import { EtudiantService } from "../../services/etudiant.service";
 import { ButtonComponent } from "../../shared/components/ui/button/button.component";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { NotificationService } from "../../services/notification.service";
 import { Filiere } from "../../models/filiere";
 import { FiliereService } from "../../services/filiere.service";
 import { Role } from '../../models/role';
+import { DataTableComponent, DataTableColumn } from '../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-etudiant',
@@ -22,18 +23,64 @@ import { Role } from '../../models/role';
     LabelComponent,
     PageBreadcrumbComponent,
     ButtonComponent,
+    DataTableComponent,
+    DatePipe
   ],
   templateUrl: './etudiant.component.html',
 })
 export class EtudiantComponent implements OnInit {
   etudiant: Etudiant = new Etudiant();
   etudiants: Etudiant[] = [];
-  allEtudiants: Etudiant[] = [];
   filieres: Filiere[] = [];
   editMode: boolean = false;
-  searchTerm: string = '';
   selectedPhotoFile: File | null = null;
   readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
+
+  columns: DataTableColumn[] = [
+    { 
+      key: 'photo', 
+      label: 'Photo', 
+      sortable: false,
+      render: (value: any, row: any) => {
+        const photoUrl = row.photo ? `http://localhost:8080/uploads/${row.photo}` : 'https://via.placeholder.com/40';
+        return `<img src="${photoUrl}" alt="Photo" class="h-10 w-10 rounded-full object-cover">`;
+      }
+    },
+    { 
+      key: 'nom', 
+      label: 'Nom', 
+      sortable: true,
+      render: (value: any, row: any) => `${row.nom || ''} ${row.prenom || ''}`
+    },
+    { key: 'email', label: 'Email', sortable: true },
+    { key: 'contact', label: 'Contact', sortable: false },
+    { key: 'sexe', label: 'Sexe', sortable: true },
+    { 
+      key: 'dateNaissance', 
+      label: 'Date de Naissance', 
+      sortable: true,
+      render: (value: any) => {
+        if (!value) return '';
+        const date = new Date(value);
+        return date.toLocaleDateString('fr-FR');
+      }
+    },
+    { key: 'lieuNaissance', label: 'Lieu de Naissance', sortable: false },
+    { key: 'nationalite', label: 'Nationalité', sortable: true },
+    { key: 'filiere.libelle', label: 'Filière', sortable: true },
+    { 
+      key: 'statut', 
+      label: 'Statut', 
+      sortable: true,
+      render: (value: any) => {
+        const classes = value === 'Nouveau' 
+          ? 'bg-green-100 text-green-800' 
+          : 'bg-yellow-100 text-yellow-800';
+        return `<span class="px-2 py-1 rounded-full text-xs ${classes}">${value || ''}</span>`;
+      }
+    },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+  ];
 
   constructor(
     private service: EtudiantService,
@@ -54,7 +101,6 @@ export class EtudiantComponent implements OnInit {
   getEtudiants(): void {
     this.service.index().subscribe({
       next: (response: Etudiant[]) => {
-        this.allEtudiants = response;
         this.etudiants = response;
       }
     });
@@ -66,17 +112,6 @@ export class EtudiantComponent implements OnInit {
         this.filieres = response;
       }
     });
-  }
-
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.etudiants = this.allEtudiants;
-      return;
-    }
-    this.etudiants = this.allEtudiants.filter(e =>
-      (e.nom && e.nom.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
-      (e.prenom && e.prenom.toLowerCase().includes(this.searchTerm.toLowerCase()))
-    );
   }
 
   onSubmit(): void {
@@ -135,10 +170,10 @@ export class EtudiantComponent implements OnInit {
     this.etudiant = { ...etudiant };
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
+  onDelete(etudiant: Etudiant): void {
+    if (etudiant.id === undefined) return;
     if (confirm("Voulez-vous vraiment supprimer cet étudiant ?")) {
-      this.service.delete(id).subscribe({
+      this.service.delete(etudiant.id).subscribe({
         next: () => {
           this.notificationService.showSuccess("Étudiant supprimé avec succès !");
           this.getEtudiants();

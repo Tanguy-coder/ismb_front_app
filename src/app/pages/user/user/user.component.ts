@@ -10,23 +10,48 @@ import { LabelComponent } from "../../../shared/components/form/label/label.comp
 import { ButtonComponent } from "../../../shared/components/ui/button/button.component";
 import { Role } from '../../../models/role';
 import { RoleService } from '../../../services/role.service';
-import { tap } from 'rxjs/operators';
+import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent],
+  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent, DataTableComponent],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
 export class UserComponent implements OnInit {
   user: User = { active: true };
   users: User[] = [];
-  allUsers: User[] = [];
   roles: Role[] = [];
   public editMode: boolean = false;
-  public searchTerm: string = '';
   readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
+
+  columns: DataTableColumn[] = [
+    { key: 'nom', label: 'Nom', sortable: true },
+    { key: 'prenom', label: 'Prénom', sortable: true },
+    { key: 'username', label: 'Username', sortable: true },
+    { key: 'contact', label: 'Contact', sortable: false },
+    { key: 'email', label: 'Email', sortable: true },
+    {
+      key: 'roles',
+      label: 'Rôle',
+      sortable: false,
+      render: (value: any) => {
+        if (Array.isArray(value) && value.length > 0) {
+          return value[0]?.name ?? String(value[0] ?? '');
+        }
+        return value?.name ?? String(value ?? '');
+      }
+    },
+    {
+      key: 'active',
+      label: 'Actif',
+      sortable: true,
+      render: (value: any) =>
+        value ? '<span class="text-green-500">Actif</span>' : '<span class="text-red-500">Inactif</span>',
+    },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true },
+  ];
 
   constructor(
       private service: UserService,
@@ -58,7 +83,6 @@ export class UserComponent implements OnInit {
   getUsers(): void {
     this.service.index().subscribe({
       next: (response: User[]) => {
-        this.allUsers = response;
         this.users = response;
       }
     });
@@ -70,18 +94,6 @@ export class UserComponent implements OnInit {
         this.roles = response;
       }
     });
-  }
-
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.users = this.allUsers;
-      return;
-    }
-    this.users = this.allUsers.filter(user =>
-        (user.nom && user.nom.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
-        (user.prenom && user.prenom.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
-        (user.username && user.username.toLowerCase().includes(this.searchTerm.toLowerCase()))
-    );
   }
 
   onSubmit(): void {
@@ -131,17 +143,15 @@ export class UserComponent implements OnInit {
     this.user = userToEdit;
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
-    if (confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
-      this.service.delete(id).subscribe({
-        next: () => {
-          this.notificationService.showSuccess("Utilisateur supprimé avec succès !");
-          this.getUsers();
-          this.resetForm();
-        }
-      });
-    }
+  onDelete(user: User): void {
+    if (user?.id === undefined) return;
+    this.service.delete(user.id).subscribe({
+      next: () => {
+        this.notificationService.showSuccess("Utilisateur supprimé avec succès !");
+        this.getUsers();
+        this.resetForm();
+      }
+    });
   }
 
   resetForm(): void {

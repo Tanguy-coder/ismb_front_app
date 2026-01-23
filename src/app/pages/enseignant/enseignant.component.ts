@@ -8,6 +8,7 @@ import { EnseignantService } from "../../services/enseignant.service";
 import { ButtonComponent } from "../../shared/components/ui/button/button.component";
 import { CommonModule } from "@angular/common";
 import { NotificationService } from "../../services/notification.service";
+import { DataTableComponent, DataTableColumn } from '../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-enseignant',
@@ -19,17 +20,61 @@ import { NotificationService } from "../../services/notification.service";
     LabelComponent,
     PageBreadcrumbComponent,
     ButtonComponent,
+    DataTableComponent,
   ],
   templateUrl: './enseignant.component.html',
 })
 export class EnseignantComponent implements OnInit {
   enseignant: Enseignant = new Enseignant();
   enseignants: Enseignant[] = [];
-  allEnseignants: Enseignant[] = [];
   editMode: boolean = false;
-  searchTerm: string = '';
   selectedPhotoFile: File | null = null;
   readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
+
+  columns: DataTableColumn[] = [
+    { 
+      key: 'photo', 
+      label: 'Photo', 
+      sortable: false,
+      render: (value: any, row: any) => {
+        const photoUrl = row.photo ? `http://localhost:8080/uploads/${row.photo}` : 'https://via.placeholder.com/40';
+        return `<img src="${photoUrl}" alt="Photo" class="h-10 w-10 rounded-full object-cover">`;
+      }
+    },
+    { 
+      key: 'nom', 
+      label: 'Nom', 
+      sortable: true,
+      render: (value: any, row: any) => `${row.nom || ''} ${row.prenom || ''}`
+    },
+    { key: 'email', label: 'Email', sortable: true },
+    { key: 'contact', label: 'Contact', sortable: false },
+    { key: 'sexe', label: 'Sexe', sortable: true },
+    { 
+      key: 'dateNaissance', 
+      label: 'Date de Naissance', 
+      sortable: true,
+      render: (value: any) => {
+        if (!value) return '';
+        const date = new Date(value);
+        return date.toLocaleDateString('fr-FR');
+      }
+    },
+    { key: 'lieuNaissance', label: 'Lieu de Naissance', sortable: false },
+    { key: 'nationalite', label: 'Nationalité', sortable: true },
+    { 
+      key: 'statut', 
+      label: 'Statut', 
+      sortable: true,
+      render: (value: any) => {
+        const classes = value === 'Actif' 
+          ? 'bg-green-100 text-green-800' 
+          : 'bg-red-100 text-red-800';
+        return `<span class="px-2 py-1 rounded-full text-xs ${classes}">${value || ''}</span>`;
+      }
+    },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+  ];
 
   constructor(
     private service: EnseignantService,
@@ -49,21 +94,9 @@ export class EnseignantComponent implements OnInit {
   getEnseignants(): void {
     this.service.index().subscribe({
       next: (response: Enseignant[]) => {
-        this.allEnseignants = response;
         this.enseignants = response;
       }
     });
-  }
-
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.enseignants = this.allEnseignants;
-      return;
-    }
-    this.enseignants = this.allEnseignants.filter(e =>
-      (e.nom && e.nom.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
-      (e.prenom && e.prenom.toLowerCase().includes(this.searchTerm.toLowerCase()))
-    );
   }
 
   onSubmit(): void {
@@ -121,17 +154,15 @@ export class EnseignantComponent implements OnInit {
     this.enseignant = { ...enseignant };
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
-    if (confirm("Voulez-vous vraiment supprimer cet enseignant ?")) {
-      this.service.delete(id).subscribe({
-        next: () => {
-          this.notificationService.showSuccess("Enseignant supprimé avec succès !");
-          this.getEnseignants();
-          this.resetForm();
-        }
-      });
-    }
+  onDelete(enseignant: Enseignant): void {
+    if (enseignant.id === undefined) return;
+    this.service.delete(enseignant.id).subscribe({
+      next: () => {
+        this.notificationService.showSuccess("Enseignant supprimé avec succès !");
+        this.getEnseignants();
+        this.resetForm();
+      }
+    });
   }
 
   resetForm(): void {

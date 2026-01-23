@@ -16,6 +16,7 @@ import { FiliereService } from "../../services/filiere.service";
 import { MatiereService } from "../../services/matiere.service";
 import { EnseignantService } from "../../services/enseignant.service";
 import {AnneeService} from "../../services/annee.service";
+import { DataTableComponent, DataTableColumn } from '../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-ue',
@@ -27,19 +28,35 @@ import {AnneeService} from "../../services/annee.service";
     LabelComponent,
     PageBreadcrumbComponent,
     ButtonComponent,
+    DataTableComponent,
   ],
   templateUrl: './ue.component.html',
 })
 export class UeComponent implements OnInit {
   ue: Ue = new Ue();
   ues: Ue[] = [];
-  allUes: Ue[] = [];
   filieres: Filiere[] = [];
   matieres: Matiere[] = [];
   enseignants: Enseignant[] = [];
   anneesScolaires: AnneeScolaire[] = [];
   editMode: boolean = false;
-  searchTerm: string = '';
+
+  columns: DataTableColumn[] = [
+    { key: 'code', label: 'Code', sortable: true },
+    { key: 'libelle', label: 'Libellé', sortable: true },
+    { key: 'credits', label: 'Crédits', sortable: true },
+    { key: 'volumeHoraire', label: 'Volume Horaire', sortable: true },
+    { key: 'filiere.libelle', label: 'Filière', sortable: true },
+    { key: 'matiere.libelle', label: 'Matière', sortable: true },
+    { 
+      key: 'enseignant', 
+      label: 'Enseignant', 
+      sortable: true,
+      render: (value: any, row: any) => `${row.enseignant?.nom || ''} ${row.enseignant?.prenom || ''}`
+    },
+    { key: 'anneeScolaire.code', label: 'Année Scolaire', sortable: true },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+  ];
 
   constructor(
     private service: UeService,
@@ -66,20 +83,9 @@ export class UeComponent implements OnInit {
   getUes(): void {
     this.service.index().subscribe({
       next: (response: Ue[]) => {
-        this.allUes = response;
         this.ues = response;
       }
     });
-  }
-
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.ues = this.allUes;
-      return;
-    }
-    this.ues = this.allUes.filter(u =>
-      (u.libelle && u.libelle.toLowerCase().includes(this.searchTerm.toLowerCase()))
-    );
   }
 
   onSubmit(): void {
@@ -110,17 +116,15 @@ export class UeComponent implements OnInit {
     this.ue = { ...ue };
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
-    if (confirm("Voulez-vous vraiment supprimer cette UE ?")) {
-      this.service.delete(id).subscribe({
-        next: () => {
-          this.notificationService.showSuccess("UE supprimée avec succès !");
-          this.getUes();
-          this.resetForm();
-        }
-      });
-    }
+  onDelete(ue: Ue): void {
+    if (ue.id === undefined) return;
+    this.service.delete(ue.id).subscribe({
+      next: () => {
+        this.notificationService.showSuccess("UE supprimée avec succès !");
+        this.getUes();
+        this.resetForm();
+      }
+    });
   }
 
   resetForm(): void {

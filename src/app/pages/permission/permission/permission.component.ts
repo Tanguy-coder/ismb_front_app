@@ -8,20 +8,24 @@ import { NotificationService } from "../../../services/notification.service";
 import { InputFieldComponent } from "../../../shared/components/form/input/input-field.component";
 import { LabelComponent } from "../../../shared/components/form/label/label.component";
 import { ButtonComponent } from "../../../shared/components/ui/button/button.component";
+import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-permission',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent],
+  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent, DataTableComponent],
   templateUrl: './permission.component.html',
   styleUrl: './permission.component.css'
 })
 export class PermissionComponent implements OnInit {
   permission: Permission = new Permission();
   permissions: Permission[] = [];
-  allPermissions: Permission[] = [];
   public editMode: boolean = false;
-  public searchTerm: string = '';
+
+  columns: DataTableColumn[] = [
+    { key: 'name', label: 'Nom', sortable: true },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+  ];
 
   constructor(
       private service: PermissionService,
@@ -43,20 +47,9 @@ export class PermissionComponent implements OnInit {
   getPermissions(): void {
     this.service.index().subscribe({
       next: (response: Permission[]) => {
-        this.allPermissions = response;
         this.permissions = response;
       }
     });
-  }
-
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.permissions = this.allPermissions;
-      return;
-    }
-    this.permissions = this.allPermissions.filter(permission =>
-        permission.name && permission.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
   }
 
   onSubmit(): void {
@@ -86,17 +79,15 @@ export class PermissionComponent implements OnInit {
     this.permission = { ...permission };
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
-    if (confirm("Voulez-vous vraiment supprimer cette permission ?")) {
-      this.service.delete(id).subscribe({
-        next: () => {
-          this.notificationService.showSuccess("Permission supprimée avec succès !");
-          this.getPermissions();
-          this.resetForm();
-        }
-      });
-    }
+  onDelete(permission: Permission): void {
+    if (permission.id === undefined) return;
+    this.service.delete(permission.id).subscribe({
+      next: () => {
+        this.notificationService.showSuccess("Permission supprimée avec succès !");
+        this.getPermissions();
+        this.resetForm();
+      }
+    });
   }
 
   resetForm(): void {

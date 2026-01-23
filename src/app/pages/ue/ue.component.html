@@ -60,53 +60,14 @@
     </div>
 
     <!-- Table Section -->
-    <div class="rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
-        <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-            <div>
-                <h4 class="text-xl font-semibold text-black dark:text-white">Liste des UEs</h4>
-            </div>
-            <div class="relative">
-                 <input type="text" placeholder="Rechercher..." class="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-none dark:border-gray-700 dark:text-white/90 xl:w-[300px]" [(ngModel)]="searchTerm" (ngModelChange)="onSearch()" name="search"/>
-            </div>
-        </div>
-
-        <div class="max-w-full overflow-x-auto">
-            <table class="min-w-full">
-                <thead class="border-gray-100 border-y dark:border-white/[0.05]">
-                    <tr>
-                        <th class="py-3 pl-5 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Code</th>
-                        <th class="py-3 pl-5 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Libellé</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Crédits</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Volume Horaire</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Filière</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Matière</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Enseignant</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Année Scolaire</th>
-                        <th class="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                    <tr *ngFor="let ue of ues">
-                        <td class="px-4 py-4"><h5 class="font-medium text-gray-700 dark:text-gray-400">{{ ue.code }}</h5></td>
-                        <td class="px-4 py-4"><h5 class="font-medium text-gray-700 dark:text-gray-400">{{ ue.libelle }}</h5></td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ue.credits }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ue.volumeHoraire }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ue.filiere.libelle }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ue.matiere.libelle }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ue.enseignant.nom }} {{ ue.enseignant.prenom }}</td>
-                        <td class="px-4 py-4 text-gray-700 dark:text-gray-400">{{ ue.anneeScolaire.code }}</td>
-                        <td class="px-4 py-4">
-                            <div class="flex items-center space-x-3.5">
-                                <button (click)="onEdit(ue)" class="font-medium text-brand-500 hover:text-brand-600">Modifier</button>
-                                <button (click)="onDelete(ue.id)" class="font-medium text-error-500 hover:text-error-600">Supprimer</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr *ngIf="ues.length === 0">
-                        <td colspan="8" class="py-10 text-center">Aucune UE trouvée.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <app-datatable
+      [data]="ues"
+      [columns]="columns"
+      title="Liste des UEs"
+      fileName="ues"
+      [showExportButtons]="true"
+      [pageSize]="10"
+      (onEdit)="onEdit($event)"
+      (onDelete)="onDelete($event)">
+    </app-datatable>
 </div>

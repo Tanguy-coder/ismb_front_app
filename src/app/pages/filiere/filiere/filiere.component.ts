@@ -10,21 +10,27 @@ import { LabelComponent } from "../../../shared/components/form/label/label.comp
 import { ButtonComponent } from "../../../shared/components/ui/button/button.component";
 import { Niveau } from '../../../models/niveau';
 import { NiveauService } from '../../../services/niveau.service';
+import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-filiere',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent],
+  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent, DataTableComponent],
   templateUrl: './filiere.component.html',
   styleUrl: './filiere.component.css'
 })
 export class FiliereComponent implements OnInit {
   filiere: Filiere = new Filiere();
   filieres: Filiere[] = [];
-  allFilieres: Filiere[] = [];
   niveaux: Niveau[] = [];
   public editMode: boolean = false;
-  public searchTerm: string = '';
+
+  columns: DataTableColumn[] = [
+    { key: 'libelle', label: 'Libellé', sortable: true },
+    { key: 'description', label: 'Description', sortable: false },
+    { key: 'niveau.libelle', label: 'Niveau', sortable: true },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+  ];
 
   constructor(
       private service: FiliereService,
@@ -48,9 +54,7 @@ export class FiliereComponent implements OnInit {
   getFilieres(): void {
     this.service.index().subscribe({
       next: (response: Filiere[]) => {
-        this.allFilieres = response;
         this.filieres = response;
-        console.log(response);
       }
     });
   }
@@ -63,15 +67,6 @@ export class FiliereComponent implements OnInit {
     });
   }
 
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.filieres = this.allFilieres;
-      return;
-    }
-    this.filieres = this.allFilieres.filter(filiere =>
-        filiere.libelle && filiere.libelle.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
 
   onSubmit(): void {
     if (!this.validateForm()) {
@@ -100,10 +95,10 @@ export class FiliereComponent implements OnInit {
     this.filiere = { ...filiere };
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
+  onDelete(filiere: Filiere): void {
+    if (filiere.id === undefined) return;
     if (confirm("Voulez-vous vraiment supprimer cette filière ?")) {
-      this.service.delete(id).subscribe({
+      this.service.delete(filiere.id).subscribe({
         next: () => {
           this.notificationService.showSuccess("Filière supprimée avec succès !");
           this.getFilieres();

@@ -8,6 +8,7 @@ import { EtablissementService } from "../../../services/etablissement.service";
 import { ButtonComponent } from "../../../shared/components/ui/button/button.component";
 import { CommonModule } from "@angular/common";
 import { NotificationService } from "../../../services/notification.service";
+import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-etablissement',
@@ -19,18 +20,33 @@ import { NotificationService } from "../../../services/notification.service";
     LabelComponent,
     PageBreadcrumbComponent,
     ButtonComponent,
+    DataTableComponent,
   ],
   templateUrl: './etablissement.component.html',
 })
 export class EtablissementComponent implements OnInit {
   etablissement: Etablissement = new Etablissement();
   etablissements: Etablissement[] = [];
-  allEtablissements: Etablissement[] = [];
   editMode: boolean = false;
-  searchTerm: string = '';
   selectedLogoFile: File | null = null;
   selectedImageFile: File | null = null;
   readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
+
+  columns: DataTableColumn[] = [
+    { 
+      key: 'logo', 
+      label: 'Logo', 
+      sortable: false,
+      render: (value: any, row: any) => {
+        const logoUrl = row.logo ? `http://localhost:8080/uploads/${row.logo}` : 'https://via.placeholder.com/40';
+        return `<img src="${logoUrl}" alt="Logo" class="h-10 w-10 rounded-full object-cover">`;
+      }
+    },
+    { key: 'nom', label: 'Nom', sortable: true },
+    { key: 'email', label: 'Email', sortable: true },
+    { key: 'contact', label: 'Contact', sortable: false },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+  ];
 
   constructor(
     private service: EtablissementService,
@@ -55,21 +71,9 @@ export class EtablissementComponent implements OnInit {
   getEtablissements(): void {
     this.service.index().subscribe({
       next: (response: Etablissement[]) => {
-        console.log('Données brutes reçues de l\'API:', response);
-        this.allEtablissements = response;
         this.etablissements = response;
       }
     });
-  }
-
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.etablissements = this.allEtablissements;
-      return;
-    }
-    this.etablissements = this.allEtablissements.filter(e =>
-      e.nom && e.nom.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
   }
 
   onSubmit(): void {
@@ -117,17 +121,15 @@ export class EtablissementComponent implements OnInit {
     this.etablissement = { ...etablissement };
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
-    if (confirm("Voulez-vous vraiment supprimer cet établissement ?")) {
-      this.service.delete(id).subscribe({
-        next: () => {
-          this.notificationService.showSuccess("Établissement supprimé avec succès !");
-          this.getEtablissements();
-          this.resetForm();
-        }
-      });
-    }
+  onDelete(etablissement: Etablissement): void {
+    if (etablissement.id === undefined) return;
+    this.service.delete(etablissement.id).subscribe({
+      next: () => {
+        this.notificationService.showSuccess("Établissement supprimé avec succès !");
+        this.getEtablissements();
+        this.resetForm();
+      }
+    });
   }
 
   resetForm(): void {

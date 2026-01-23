@@ -11,22 +11,36 @@ import { ButtonComponent } from "../../../shared/components/ui/button/button.com
 import { MultiSelectComponent, Option } from "../../../shared/components/form/multi-select/multi-select.component";
 import { Niveau } from '../../../models/niveau';
 import { NiveauService } from '../../../services/niveau.service';
+import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
 
 @Component({
   selector: 'app-matiere',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent, MultiSelectComponent],
+  imports: [CommonModule, FormsModule, PageBreadcrumbComponent, InputFieldComponent, LabelComponent, ButtonComponent, MultiSelectComponent, DataTableComponent],
   templateUrl: './matiere.component.html',
 })
 export class MatiereComponent implements OnInit {
   matiere: Matiere = new Matiere();
   matieres: Matiere[] = [];
-  allMatieres: Matiere[] = [];
   niveaux: Niveau[] = [];
   multiSelectOptions: Option[] = [];
   selectedNiveauIds: string[] = [];
   public editMode: boolean = false;
-  public searchTerm: string = '';
+
+  columns: DataTableColumn[] = [
+    { key: 'libelle', label: 'Libellé', sortable: true },
+    { key: 'sigle', label: 'Sigle', sortable: true },
+    { key: 'type', label: 'Type', sortable: true },
+    { 
+      key: 'niveaux', 
+      label: 'Niveaux', 
+      sortable: false,
+      render: (value: any, row: any) => {
+        return row.niveaux ? row.niveaux.map((n: any) => n.libelle).join(', ') : '';
+      }
+    },
+    { key: 'actions', label: 'Actions', sortable: false, isAction: true }
+  ];
 
   constructor(
       private service: MatiereService,
@@ -50,9 +64,7 @@ export class MatiereComponent implements OnInit {
   getMatieres(): void {
     this.service.index().subscribe({
       next: (response: Matiere[]) => {
-        this.allMatieres = response;
         this.matieres = response;
-        console.log(response);
       }
     });
   }
@@ -64,18 +76,6 @@ export class MatiereComponent implements OnInit {
         this.multiSelectOptions = this.niveaux.map(n => ({ value: n.id!.toString(), text: n.libelle! }));
       }
     });
-  }
-
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.matieres = this.allMatieres;
-      return;
-    }
-    this.matieres = this.allMatieres.filter(matiere =>
-        (matiere.libelle && matiere.libelle.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
-        (matiere.sigle && matiere.sigle.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
-        (matiere.type && matiere.type.toLowerCase().includes(this.searchTerm.toLowerCase()))
-    );
   }
 
   onSubmit(): void {
@@ -106,17 +106,15 @@ export class MatiereComponent implements OnInit {
     this.selectedNiveauIds = this.matiere.niveaux ? this.matiere.niveaux.map(n => n.id!.toString()) : [];
   }
 
-  onDelete(id: number | undefined): void {
-    if (id === undefined) return;
-    if (confirm("Voulez-vous vraiment supprimer cette matière ?")) {
-      this.service.delete(id).subscribe({
-        next: () => {
-          this.notificationService.showSuccess("Matière supprimée avec succès !");
-          this.getMatieres();
-          this.resetForm();
-        }
-      });
-    }
+  onDelete(matiere: Matiere): void {
+    if (matiere.id === undefined) return;
+    this.service.delete(matiere.id).subscribe({
+      next: () => {
+        this.notificationService.showSuccess("Matière supprimée avec succès !");
+        this.getMatieres();
+        this.resetForm();
+      }
+    });
   }
 
   resetForm(): void {
