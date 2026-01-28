@@ -32,6 +32,7 @@ export class EtudiantComponent implements OnInit {
   etudiants: Etudiant[] = [];
   filieres: Filiere[] = [];
   editMode: boolean = false;
+  showForm: boolean = false;
   selectedPhotoFile: File | null = null;
   photoPreviewUrl: string | null = null;
   private readonly uploadsBaseUrl = 'http://localhost:8080/uploads/';
@@ -173,8 +174,23 @@ export class EtudiantComponent implements OnInit {
     });
   }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.etudiant = new Etudiant();
+    this.etudiant.password = 'etu1234';
+    this.etudiant.roles = [{ id: 4, name: 'Student' }];
+    this.etudiant.isActive = true;
+    this.etudiant.statut = 'Nouveau';
+    this.selectedPhotoFile = null;
+    this.photoPreviewUrl = null;
+    const photoInput = document.getElementById('photo-upload') as HTMLInputElement;
+    if (photoInput) photoInput.value = '';
+    this.showForm = true;
+  }
+
   onEdit(etudiant: Etudiant): void {
     this.editMode = true;
+    this.showForm = true;
     this.etudiant = { ...etudiant };
 
     // Prévisualisation: image actuelle si pas encore remplacée
@@ -210,6 +226,7 @@ export class EtudiantComponent implements OnInit {
     this.selectedPhotoFile = null;
     this.photoPreviewUrl = null;
     this.editMode = false;
+    this.showForm = false;
     const photoInput = document.getElementById('photo-upload') as HTMLInputElement;
     if (photoInput) photoInput.value = '';
   }

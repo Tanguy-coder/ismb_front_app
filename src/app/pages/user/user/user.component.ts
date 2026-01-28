@@ -24,6 +24,7 @@ export class UserComponent implements OnInit {
   users: User[] = [];
   roles: Role[] = [];
   public editMode: boolean = false;
+  public showForm: boolean = false;
   readonly emailPattern: string = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$';
 
   columns: DataTableColumn[] = [
@@ -134,8 +135,15 @@ export class UserComponent implements OnInit {
     });
   }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.user = { active: true };
+    this.showForm = true;
+  }
+
   onEdit(user: User): void {
     this.editMode = true;
+    this.showForm = true;
     const userToEdit: any = { ...user };
     if (userToEdit.roles && Array.isArray(userToEdit.roles)) {
       userToEdit.roles = userToEdit.roles[0];
@@ -157,6 +165,7 @@ export class UserComponent implements OnInit {
   resetForm(): void {
     this.user = { active: true };
     this.editMode = false;
+    this.showForm = false;
   }
 
   private isValidEmail(email: string | null | undefined): boolean {

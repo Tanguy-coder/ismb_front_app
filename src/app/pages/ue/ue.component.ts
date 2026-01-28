@@ -40,6 +40,7 @@ export class UeComponent implements OnInit {
   enseignants: Enseignant[] = [];
   anneesScolaires: AnneeScolaire[] = [];
   editMode: boolean = false;
+  showForm: boolean = false;
 
   columns: DataTableColumn[] = [
     { key: 'code', label: 'Code', sortable: true },
@@ -111,8 +112,15 @@ export class UeComponent implements OnInit {
     });
   }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.ue = new Ue();
+    this.showForm = true;
+  }
+
   onEdit(ue: Ue): void {
     this.editMode = true;
+    this.showForm = true;
     this.ue = { ...ue };
   }
 
@@ -130,6 +138,7 @@ export class UeComponent implements OnInit {
   resetForm(): void {
     this.ue = new Ue();
     this.editMode = false;
+    this.showForm = false;
   }
 
   compareById(item1: any, item2: any): boolean {

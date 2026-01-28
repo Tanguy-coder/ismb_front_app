@@ -24,6 +24,7 @@ export class RoleComponent implements OnInit {
   roles: Role[] = [];
   permissions: Permission[] = [];
   public editMode: boolean = false;
+  public showForm: boolean = false;
 
   columns: DataTableColumn[] = [
     { key: 'name', label: 'Nom', sortable: true },
@@ -99,8 +100,16 @@ export class RoleComponent implements OnInit {
     });
   }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.role = new Role();
+    this.role.permissions = [];
+    this.showForm = true;
+  }
+
   onEdit(role: Role): void {
     this.editMode = true;
+    this.showForm = true;
     this.role = { ...role };
     if (!this.role.permissions) {
       this.role.permissions = [];
@@ -122,6 +131,7 @@ export class RoleComponent implements OnInit {
     this.role = new Role();
     this.role.permissions = [];
     this.editMode = false;
+    this.showForm = false;
   }
 
   onPermissionChange(permission: Permission, event: any): void {

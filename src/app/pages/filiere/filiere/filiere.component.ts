@@ -29,6 +29,7 @@ export class FiliereComponent implements OnInit {
   anneesScolaires: AnneeScolaire[] = [];
   selectedAnneeScolaire: AnneeScolaire | undefined = undefined;
   public editMode: boolean = false;
+  public showForm: boolean = false;
 
   constructor(
       private service: FiliereService,
@@ -112,8 +113,15 @@ export class FiliereComponent implements OnInit {
     });
   }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.filiere = new Filiere();
+    this.showForm = true;
+  }
+
   onEdit(filiere: Filiere): void {
     this.editMode = true;
+    this.showForm = true;
     this.filiere = { ...filiere };
   }
 
@@ -133,6 +141,7 @@ export class FiliereComponent implements OnInit {
   resetForm(): void {
     this.filiere = new Filiere();
     this.editMode = false;
+    this.showForm = false;
   }
 
   onListeClasseClick(filiereId: number): void {
@@ -145,6 +154,22 @@ export class FiliereComponent implements OnInit {
       const filiereLibelle = filiere?.libelle || 'Filière';
       
       this.router.navigate(['/liste-classe'], {
+          queryParams: {
+              filiereId: filiereId,
+              anneeScolaireId: this.selectedAnneeScolaire.id,
+              filiereLibelle: filiereLibelle,
+              anneeCode: this.selectedAnneeScolaire.code
+          }
+      });
+  }
+
+  onListeCarteClick(filiereId: number, filiereLibelle: string): void {
+      if (!this.selectedAnneeScolaire){
+          this.notificationService.showWarning("Veuillez sélectionner l'année académique pour générer les cartes");
+          return;
+      }
+      
+      this.router.navigate(['/carte-etudiant'], {
           queryParams: {
               filiereId: filiereId,
               anneeScolaireId: this.selectedAnneeScolaire.id,

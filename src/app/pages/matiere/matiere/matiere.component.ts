@@ -26,6 +26,7 @@ export class MatiereComponent implements OnInit {
   multiSelectOptions: Option[] = [];
   selectedNiveauIds: string[] = [];
   public editMode: boolean = false;
+  public showForm: boolean = false;
 
   columns: DataTableColumn[] = [
     { key: 'libelle', label: 'Libellé', sortable: true },
@@ -100,8 +101,17 @@ export class MatiereComponent implements OnInit {
     });
   }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.matiere = new Matiere();
+    this.matiere.niveaux = [];
+    this.selectedNiveauIds = [];
+    this.showForm = true;
+  }
+
   onEdit(matiere: Matiere): void {
     this.editMode = true;
+    this.showForm = true;
     this.matiere = { ...matiere };
     this.selectedNiveauIds = this.matiere.niveaux ? this.matiere.niveaux.map(n => n.id!.toString()) : [];
   }
@@ -122,6 +132,7 @@ export class MatiereComponent implements OnInit {
     this.matiere.niveaux = []; // Initialize niveaux as an empty array
     this.selectedNiveauIds = [];
     this.editMode = false;
+    this.showForm = false;
   }
 
   onNiveauxSelectionChange(selectedIds: string[]): void {

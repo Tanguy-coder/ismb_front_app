@@ -29,6 +29,7 @@ export class AnneeScolaireComponent implements OnInit {
     annee: AnneeScolaire = new AnneeScolaire();
     annees: AnneeScolaire[] = [];
     public editMode: boolean = false;
+    public showForm: boolean = false;
 
     columns: DataTableColumn[] = [
       { key: 'code', label: 'Code', sortable: true },
@@ -103,8 +104,15 @@ export class AnneeScolaireComponent implements OnInit {
         });
     }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.annee = new AnneeScolaire();
+    this.showForm = true;
+  }
+
     onEdit(annee: AnneeScolaire): void {
         this.editMode = true;
+        this.showForm = true;
         this.annee = { ...annee }; // Use spread operator for a clean copy
     }
 
@@ -122,5 +130,6 @@ export class AnneeScolaireComponent implements OnInit {
     resetForm(): void {
         this.annee = new AnneeScolaire();
         this.editMode = false;
+        this.showForm = false;
     }
 }

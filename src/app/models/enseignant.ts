@@ -16,4 +16,5 @@ export class Enseignant {
     nationalite?: string;
     photo?: string;
     statut?: string;
+    etat?: boolean;
 }

@@ -21,6 +21,7 @@ export class PermissionComponent implements OnInit {
   permission: Permission = new Permission();
   permissions: Permission[] = [];
   public editMode: boolean = false;
+  public showForm: boolean = false;
 
   columns: DataTableColumn[] = [
     { key: 'name', label: 'Nom', sortable: true },
@@ -74,8 +75,15 @@ export class PermissionComponent implements OnInit {
     });
   }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.permission = new Permission();
+    this.showForm = true;
+  }
+
   onEdit(permission: Permission): void {
     this.editMode = true;
+    this.showForm = true;
     this.permission = { ...permission };
   }
 
@@ -93,5 +101,6 @@ export class PermissionComponent implements OnInit {
   resetForm(): void {
     this.permission = new Permission();
     this.editMode = false;
+    this.showForm = false;
   }
 }

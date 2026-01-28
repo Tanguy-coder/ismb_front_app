@@ -1,0 +1,124 @@
+<div class="p-6">
+  <!-- Boutons d'action (cachés à l'impression) -->
+  <div class="no-print mb-6 flex justify-end gap-4">
+    <app-button (click)="onRetour()" variant="outline">
+      ← Retour
+    </app-button>
+    <app-button (click)="onImprimer()" variant="primary">
+      🖨️ Imprimer les cartes
+    </app-button>
+  </div>
+
+  <!-- Message de chargement -->
+  <div *ngIf="loading" class="no-print flex justify-center items-center p-8">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500 mx-auto mb-4"></div>
+      <p class="text-gray-600 dark:text-gray-400">Chargement des cartes...</p>
+    </div>
+  </div>
+
+  <!-- Message si aucun étudiant -->
+  <div *ngIf="!loading && etudiants.length === 0" class="no-print text-center p-8">
+    <p class="text-gray-600 dark:text-gray-400">Aucun étudiant trouvé pour cette classe.</p>
+  </div>
+
+  <!-- Grille de cartes (10 par page A4) -->
+  <div *ngIf="!loading && etudiants.length > 0" class="cards-container">
+    <div *ngFor="let etudiant of etudiants; let i = index" class="card-wrapper">
+      <div class="student-card">
+        <!-- En-tête -->
+        <div class="card-header">
+          <div class="card-header-left">
+            <img 
+              *ngIf="getEtablissementLogoUrl()" 
+              [src]="getEtablissementLogoUrl()" 
+              alt="Logo"
+              class="header-logo"
+            />
+          </div>
+          <div class="card-header-center">
+            <div class="country-name">{{ (etablissement[0] && etablissement[0].ministere) || 'RÉPUBLIQUE DU TOGO' }}</div>
+            <div class="country-motto">Travail - Liberté - Patrie</div>
+            <div class="school-name">{{ (etablissement[0] && etablissement[0].nom) || 'ÉTABLISSEMENT' }}</div>
+            <div class="card-type">CARTE D'IDENTITÉ SCOLAIRE</div>
+          </div>
+          <div class="card-header-right">
+            <div class="education-badge">
+              <div class="badge-icon">🎓</div>
+              <div class="badge-text">EDUCATION</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Corps de la carte -->
+        <div class="card-body">
+          <!-- Photo -->
+          <div class="photo-section">
+            <img 
+              [src]="getPhotoUrl(etudiant.photo)" 
+              [alt]="etudiant.nom + ' ' + etudiant.prenom"
+              class="student-photo"
+            />
+          </div>
+
+          <!-- Informations -->
+          <div class="info-section">
+            <div class="academic-year">ANNÉE SCOLAIRE : {{ anneeCode }}</div>
+            
+            <div class="info-row">
+              <span class="info-label">Nom :</span>
+              <span class="info-value">{{ (etudiant.nom || '') | uppercase }}</span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Prénom :</span>
+              <span class="info-value">{{ etudiant.prenom || '' }}</span>
+            </div>
+
+            <div class="info-row-inline">
+              <div class="info-item">
+                <span class="info-label">Née le :</span>
+                <span class="info-value">{{ etudiant.age ? (2024 - etudiant.age + '-01-01') : '-' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">À</span>
+                <span class="info-value">{{ etudiant.lieuNaissance || '-' }}</span>
+              </div>
+            </div>
+
+            <div class="info-row-inline">
+              <div class="info-item">
+                <span class="info-label">Sexe :</span>
+                <span class="info-value">{{ etudiant.sexe || '-' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Classe :</span>
+                <span class="info-value">{{ filiereLibelle }}</span>
+              </div>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Contact :</span>
+              <span class="info-value">**********</span>
+            </div>
+          </div>
+
+          <!-- QR Code -->
+          <div class="qr-section">
+            <img 
+              [src]="generateQRCode(etudiant.matricule)" 
+              alt="QR Code"
+              class="qr-code"
+            />
+          </div>
+        </div>
+
+        <!-- Pied de page -->
+        <div class="card-footer">
+          <div class="matricule">MAT. : {{ etudiant.matricule || 'N/A' }}</div>
+          <div class="print-info">IMPRIMÉ PAR {{ (etablissement[0] && etablissement[0].nom) || 'ÉCOLE' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

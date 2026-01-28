@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { PageBreadcrumbComponent } from '../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { ParcourtService } from '../../services/parcourt.service';
 import { ListeClasse } from '../../models/liste-classe';
@@ -13,7 +12,7 @@ import { Etablissement } from '../../models/etablissement';
 @Component({
   selector: 'app-liste-classe',
   standalone: true,
-  imports: [CommonModule, PageBreadcrumbComponent, ButtonComponent],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './liste-classe.component.html',
   styleUrl: './liste-classe.component.css'
 })

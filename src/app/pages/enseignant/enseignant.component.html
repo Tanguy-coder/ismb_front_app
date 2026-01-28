@@ -2,8 +2,19 @@
     <app-page-breadcrumb pageTitle="Enseignants" />
 
     <!-- Form Section -->
-    <div class="rounded-sm border border-stroke p-4 mb-6">
-        <h3 class="font-medium text-black dark:text-white text-lg mb-4">{{ editMode ? 'Modifier' : 'Créer' }} un Enseignant</h3>
+    <div *ngIf="showForm" class="rounded-sm border border-stroke p-4 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-medium text-black dark:text-white text-lg">{{ editMode ? 'Modifier' : 'Créer' }} un Enseignant</h3>
+            <button 
+                (click)="resetForm()" 
+                class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                type="button"
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
         <form (ngSubmit)="onSubmit()" #enseignantForm="ngForm">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -69,24 +80,42 @@
                         <option value="Inactif">Inactif</option>
                     </select>
                 </div>
+                <div class="flex items-center gap-2">
+                    <input 
+                        type="checkbox" 
+                        id="etat" 
+                        name="etat" 
+                        [(ngModel)]="enseignant.etat" 
+                        class="form-checkbox h-5 w-5 text-brand-500 rounded focus:ring-brand-400"
+                    />
+                    <app-label for="etat">En fonction dans l'établissement</app-label>
+                </div>
             </div>
 
             <div class="flex justify-end gap-4 mt-6">
                 <app-button type="submit" variant="primary">{{ editMode ? "Mettre à jour" : "Créer" }}</app-button>
-                <app-button *ngIf="editMode" (click)="resetForm()">Annuler</app-button>
+                <app-button (click)="resetForm()">Annuler</app-button>
             </div>
         </form>
     </div>
 
     <!-- Table Section -->
-    <app-datatable
-      [data]="enseignants"
-      [columns]="columns"
-      title="Liste des Enseignants"
-      fileName="enseignants"
-      [showExportButtons]="true"
-      [pageSize]="10"
-      (onEdit)="onEdit($event)"
-      (onDelete)="onDelete($event)">
-    </app-datatable>
+    <div class="rounded-sm border border-stroke bg-white dark:bg-gray-dark">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-stroke dark:border-gray-700">
+            <h3 class="font-medium text-black dark:text-white text-lg">Liste des Enseignants</h3>
+            <app-button *ngIf="!showForm" (click)="showAddForm()" variant="primary">
+                + Ajouter un Enseignant
+            </app-button>
+        </div>
+        <app-datatable
+          [data]="enseignants"
+          [columns]="columns"
+          title=""
+          fileName="enseignants"
+          [showExportButtons]="true"
+          [pageSize]="10"
+          (onEdit)="onEdit($event)"
+          (onDelete)="onDelete($event)">
+        </app-datatable>
+    </div>
 </div>

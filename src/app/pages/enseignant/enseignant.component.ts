@@ -28,6 +28,7 @@ export class EnseignantComponent implements OnInit {
   enseignant: Enseignant = new Enseignant();
   enseignants: Enseignant[] = [];
   editMode: boolean = false;
+  showForm: boolean = false;
   selectedPhotoFile: File | null = null;
   photoPreviewUrl: string | null = null;
   private readonly uploadsBaseUrl = 'http://localhost:8080/uploads/';
@@ -73,6 +74,18 @@ export class EnseignantComponent implements OnInit {
           ? 'bg-green-100 text-green-800' 
           : 'bg-red-100 text-red-800';
         return `<span class="px-2 py-1 rounded-full text-xs ${classes}">${value || ''}</span>`;
+      }
+    },
+    { 
+      key: 'etat', 
+      label: 'État', 
+      sortable: true,
+      render: (value: any) => {
+        const classes = value 
+          ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' 
+          : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
+        const text = value ? 'En fonction' : 'Affecté';
+        return `<span class="px-2 py-1 rounded-full text-xs ${classes}">${text}</span>`;
       }
     },
     { key: 'actions', label: 'Actions', sortable: false, isAction: true }
@@ -156,8 +169,24 @@ export class EnseignantComponent implements OnInit {
     });
   }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.enseignant = new Enseignant();
+    this.enseignant.password = 'ens1234';
+    this.enseignant.roles = [{ id: 3, name: 'Teacher' }];
+    this.enseignant.isActive = true;
+    this.enseignant.statut = 'Actif';
+    this.enseignant.etat = true;
+    this.selectedPhotoFile = null;
+    this.photoPreviewUrl = null;
+    const photoInput = document.getElementById('photo-upload') as HTMLInputElement;
+    if (photoInput) photoInput.value = '';
+    this.showForm = true;
+  }
+
   onEdit(enseignant: Enseignant): void {
     this.editMode = true;
+    this.showForm = true;
     this.enseignant = { ...enseignant };
 
     if (this.photoPreviewUrl?.startsWith('blob:')) {
@@ -187,9 +216,11 @@ export class EnseignantComponent implements OnInit {
     this.enseignant.roles = [{ id: 3, name: 'Teacher' }]; // Assuming Role has id and name properties
     this.enseignant.isActive = true;
     this.enseignant.statut = 'Actif'; // Default to 'Actif'
+    this.enseignant.etat = true; // Default to 'En fonction'
     this.selectedPhotoFile = null;
     this.photoPreviewUrl = null;
     this.editMode = false;
+    this.showForm = false;
     const photoInput = document.getElementById('photo-upload') as HTMLInputElement;
     if (photoInput) photoInput.value = '';
   }

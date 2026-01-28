@@ -2,8 +2,19 @@
     <app-page-breadcrumb pageTitle="Année Académique" />
 
     <!-- Form Section -->
-    <div class="rounded-sm border border-stroke  p-4 mb-6">
-        <h3 class="font-medium text-black dark:text-white text-lg mb-4">{{ editMode ? 'Modifier' : 'Créer' }} une Année Académique</h3>
+    <div *ngIf="showForm" class="rounded-sm border border-stroke  p-4 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-medium text-black dark:text-white text-lg">{{ editMode ? 'Modifier' : 'Créer' }} une Année Académique</h3>
+            <button 
+                (click)="resetForm()" 
+                class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                type="button"
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
         <form (ngSubmit)="onSubmit()" #myForm="ngForm">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
@@ -49,7 +60,6 @@
                     {{ editMode ? "Mettre à jour" : "Créer" }}
                 </app-button>
                 <app-button
-                    *ngIf="editMode"
                     size="md"
                     (click)="resetForm()"
                 >
@@ -60,14 +70,22 @@
     </div>
 
     <!-- Table Section -->
-    <app-datatable
-      [data]="annees"
-      [columns]="columns"
-      title="Liste des Années Académiques"
-      fileName="annees-scolaires"
-      [showExportButtons]="true"
-      [pageSize]="10"
-      (onEdit)="onEdit($event)"
-      (onDelete)="onDelete($event)">
-    </app-datatable>
+    <div class="rounded-sm border border-stroke bg-white dark:bg-gray-dark">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-stroke dark:border-gray-700">
+            <h3 class="font-medium text-black dark:text-white text-lg">Liste des Années Académiques</h3>
+            <app-button *ngIf="!showForm" (click)="showAddForm()" variant="primary">
+                + Ajouter une Année Académique
+            </app-button>
+        </div>
+        <app-datatable
+          [data]="annees"
+          [columns]="columns"
+          title=""
+          fileName="annees-scolaires"
+          [showExportButtons]="true"
+          [pageSize]="10"
+          (onEdit)="onEdit($event)"
+          (onDelete)="onDelete($event)">
+        </app-datatable>
+    </div>
 </div>

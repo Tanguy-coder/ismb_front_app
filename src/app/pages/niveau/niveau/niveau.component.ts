@@ -21,6 +21,7 @@ export class NiveauComponent implements OnInit {
   niveau: Niveau = new Niveau();
   niveaux: Niveau[] = [];
   public editMode: boolean = false;
+  public showForm: boolean = false;
 
   columns: DataTableColumn[] = [
     { key: 'libelle', label: 'Libellé', sortable: true },
@@ -74,8 +75,15 @@ export class NiveauComponent implements OnInit {
     });
   }
 
+  showAddForm(): void {
+    this.editMode = false;
+    this.niveau = new Niveau();
+    this.showForm = true;
+  }
+
   onEdit(niveau: Niveau): void {
     this.editMode = true;
+    this.showForm = true;
     this.niveau = { ...niveau };
   }
 
@@ -95,5 +103,6 @@ export class NiveauComponent implements OnInit {
   resetForm(): void {
     this.niveau = new Niveau();
     this.editMode = false;
+    this.showForm = false;
   }
 }

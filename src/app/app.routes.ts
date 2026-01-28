@@ -31,6 +31,7 @@ import {UserComponent} from "./pages/user/user/user.component";
 import {EnseignantComponent} from "./pages/enseignant/enseignant.component";
 import {UeComponent} from "./pages/ue/ue.component";
 import {ListeClasseComponent} from "./pages/liste-classe/liste-classe.component";
+import {CarteEtudiantComponent} from "./pages/carte-etudiant/carte-etudiant.component";
 
 export const routes: Routes = [
   {
@@ -70,6 +71,11 @@ export const routes: Routes = [
         path: 'liste-classe',
         component: ListeClasseComponent,
         title: 'Liste de Classe',
+      },
+      {
+        path: 'carte-etudiant',
+        component: CarteEtudiantComponent,
+        title: 'Cartes d\'Identité',
       },
       {
         path: 'matieres',
