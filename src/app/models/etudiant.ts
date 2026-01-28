@@ -10,6 +10,7 @@ export class Etudiant {
     roles?: Role[];
     isActive?: boolean;
     sexe?: string;
+    matricule?: string;
     dateNaissance?: Date;
     lieuNaissance?: string;
     contact?: string;

@@ -1,9 +1,43 @@
 <div>
     <app-page-breadcrumb pageTitle="Établissements" />
 
+    <!-- Bouton pour afficher/masquer le formulaire -->
+    <div *ngIf="etablissementExists && !showForm" class="rounded-sm border border-stroke bg-white dark:bg-boxdark p-6 mb-6 text-center">
+        <div class="mb-4">
+            <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Établissement configuré</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">
+            Un établissement est déjà enregistré. Cliquez sur le bouton ci-dessous pour le modifier.
+        </p>
+        <app-button 
+            variant="primary" 
+            size="md"
+            (click)="toggleForm()"
+        >
+            ✏️ Modifier l'établissement
+        </app-button>
+    </div>
+
     <!-- Form Section -->
-    <div class="rounded-sm border border-stroke p-4 mb-6">
-        <h3 class="font-medium text-black dark:text-white text-lg mb-4">{{ editMode ? 'Modifier' : 'Créer' }} un Établissement</h3>
+    <div *ngIf="showForm" class="rounded-sm border border-stroke p-4 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-medium text-black dark:text-white text-lg">{{ editMode ? 'Modifier' : 'Créer' }} un Établissement</h3>
+            <button 
+                *ngIf="etablissementExists && editMode"
+                type="button"
+                (click)="toggleForm()"
+                class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                title="Fermer le formulaire"
+            >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
         <form (ngSubmit)="onSubmit()" #etablissementForm="ngForm">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -21,6 +55,24 @@
                 <div>
                     <app-label for="numero">Numéro</app-label>
                     <app-input-field id="numero" name="numero" [(ngModel)]="etablissement.numero" />
+                </div>
+                <div>
+                    <app-label for="devise">Devise</app-label>
+                    <app-input-field 
+                      id="devise" 
+                      name="devise" 
+                      [(ngModel)]="etablissement.devise" 
+                      placeholder="Ex: Travail-Liberté-Patrie"
+                    />
+                </div>
+                <div>
+                    <app-label for="ministere">Ministère</app-label>
+                    <app-input-field 
+                      id="ministere" 
+                      name="ministere" 
+                      [(ngModel)]="etablissement.ministere" 
+                      placeholder="Ex: Ministère de l'Enseignement Supérieur"
+                    />
                 </div>
                 <div>
                     <app-label for="logo-upload">Logo</app-label>
@@ -41,8 +93,14 @@
             </div>
 
             <div class="flex justify-end gap-4 mt-6">
-                <app-button type="submit" variant="primary">{{ editMode ? "Mettre à jour" : "Créer" }}</app-button>
-                <app-button *ngIf="editMode" (click)="resetForm()">Annuler</app-button>
+                <app-button 
+                    type="submit" 
+                    variant="primary"
+                    [disabled]="!editMode && etablissementExists"
+                >
+                    {{ editMode ? "Mettre à jour" : "Créer" }}
+                </app-button>
+                <app-button *ngIf="editMode" (click)="resetForm()" type="button">Annuler</app-button>
             </div>
         </form>
     </div>

@@ -30,6 +30,7 @@ import { authGuard } from './services/auth.guard';
 import {UserComponent} from "./pages/user/user/user.component";
 import {EnseignantComponent} from "./pages/enseignant/enseignant.component";
 import {UeComponent} from "./pages/ue/ue.component";
+import {ListeClasseComponent} from "./pages/liste-classe/liste-classe.component";
 
 export const routes: Routes = [
   {
@@ -64,6 +65,11 @@ export const routes: Routes = [
         path: 'filiere',
         component: FiliereComponent,
         title: 'Filiere',
+      },
+      {
+        path: 'liste-classe',
+        component: ListeClasseComponent,
+        title: 'Liste de Classe',
       },
       {
         path: 'matieres',

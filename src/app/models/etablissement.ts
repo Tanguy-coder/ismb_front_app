@@ -4,6 +4,8 @@ export class Etablissement {
     email: string | undefined;
     contact: string | undefined;
     numero: string | undefined;
+    devise: string | undefined;
+    ministere: string | undefined;
     logo: string | undefined;
     image: string | undefined;
 }

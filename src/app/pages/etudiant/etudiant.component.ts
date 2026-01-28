@@ -6,7 +6,7 @@ import { PageBreadcrumbComponent } from "../../shared/components/common/page-bre
 import { Etudiant } from "../../models/etudiant";
 import { EtudiantService } from "../../services/etudiant.service";
 import { ButtonComponent } from "../../shared/components/ui/button/button.component";
-import { CommonModule, DatePipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { NotificationService } from "../../services/notification.service";
 import { Filiere } from "../../models/filiere";
 import { FiliereService } from "../../services/filiere.service";
@@ -23,8 +23,7 @@ import { DataTableComponent, DataTableColumn } from '../../shared/components/dat
     LabelComponent,
     PageBreadcrumbComponent,
     ButtonComponent,
-    DataTableComponent,
-    DatePipe
+    DataTableComponent
   ],
   templateUrl: './etudiant.component.html',
 })
@@ -54,6 +53,7 @@ export class EtudiantComponent implements OnInit {
       sortable: true,
       render: (value: any, row: any) => `${row.nom || ''} ${row.prenom || ''}`
     },
+    { key: 'matricule', label: 'Matricule', sortable: true },
     { key: 'email', label: 'Email', sortable: true },
     { key: 'contact', label: 'Contact', sortable: false },
     { key: 'sexe', label: 'Sexe', sortable: true },

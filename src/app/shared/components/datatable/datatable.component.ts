@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ExportService } from '../../../services/export.service';
 import { ButtonComponent } from '../ui/button/button.component';
 
@@ -44,7 +45,8 @@ export class DataTableComponent implements OnInit, OnChanges {
 
   constructor(
     private exportService: ExportService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -149,12 +151,17 @@ export class DataTableComponent implements OnInit, OnChanges {
     this.exportService.exportToPDF(this.filteredData, this.fileName, this.title, columns);
   }
 
-  getCellValue(row: any, column: DataTableColumn): string {
+  getCellValue(row: any, column: DataTableColumn): SafeHtml | string {
     if (column.isAction && this.actionTemplate) {
       return ''; // Les actions seront gérées par le template
     }
     if (column.render) {
-      return column.render(this.getNestedValue(row, column.key), row);
+      const htmlResult = column.render(this.getNestedValue(row, column.key), row);
+      // Si le résultat contient du HTML (balises), le marquer comme sûr
+      if (htmlResult && htmlResult.includes('<')) {
+        return this.sanitizer.bypassSecurityTrustHtml(htmlResult);
+      }
+      return htmlResult;
     }
     const value = this.getNestedValue(row, column.key);
     return value !== null && value !== undefined ? String(value) : '';

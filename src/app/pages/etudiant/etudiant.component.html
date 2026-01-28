@@ -15,6 +15,16 @@
                     <app-input-field id="prenom" name="prenom" [(ngModel)]="etudiant.prenom" required />
                 </div>
                 <div>
+                    <app-label for="matricule">Matricule</app-label>
+                    <app-input-field 
+                      id="matricule" 
+                      name="matricule" 
+                      [(ngModel)]="etudiant.matricule" 
+                      placeholder="Ex: ETU2024001"
+                      required 
+                    />
+                </div>
+                <div>
                     <app-label for="email">Email</app-label>
                     <app-input-field id="email" name="email" type="email" [(ngModel)]="etudiant.email" required [pattern]="emailPattern" />
                 </div>

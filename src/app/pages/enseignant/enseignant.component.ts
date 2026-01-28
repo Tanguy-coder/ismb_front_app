@@ -170,12 +170,12 @@ export class EnseignantComponent implements OnInit {
   onDelete(enseignant: Enseignant): void {
     if (enseignant.id === undefined) return;
     this.service.delete(enseignant.id).subscribe({
-      next: () => {
-        this.notificationService.showSuccess("Enseignant supprimé avec succès !");
-        this.getEnseignants();
-        this.resetForm();
-      }
-    });
+        next: () => {
+          this.notificationService.showSuccess("Enseignant supprimé avec succès !");
+          this.getEnseignants();
+          this.resetForm();
+        }
+      });
   }
 
   resetForm(): void {

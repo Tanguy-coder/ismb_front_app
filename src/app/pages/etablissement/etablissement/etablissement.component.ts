@@ -28,6 +28,8 @@ export class EtablissementComponent implements OnInit {
   etablissement: Etablissement = new Etablissement();
   etablissements: Etablissement[] = [];
   editMode: boolean = false;
+  etablissementExists: boolean = false;
+  showForm: boolean = true;
   selectedLogoFile: File | null = null;
   selectedImageFile: File | null = null;
   logoPreviewUrl: string | null = null;
@@ -48,6 +50,9 @@ export class EtablissementComponent implements OnInit {
     { key: 'nom', label: 'Nom', sortable: true },
     { key: 'email', label: 'Email', sortable: true },
     { key: 'contact', label: 'Contact', sortable: false },
+    { key: 'numero', label: 'Numéro', sortable: false },
+    { key: 'devise', label: 'Devise', sortable: false },
+    { key: 'ministere', label: 'Ministère', sortable: true },
     { key: 'actions', label: 'Actions', sortable: false, isAction: true }
   ];
 
@@ -58,7 +63,6 @@ export class EtablissementComponent implements OnInit {
 
   ngOnInit() {
     this.getEtablissements();
-    console.log(this.etablissement);
   }
 
   onLogoFileSelected(event: Event): void {
@@ -85,11 +89,23 @@ export class EtablissementComponent implements OnInit {
     this.service.index().subscribe({
       next: (response: Etablissement[]) => {
         this.etablissements = response;
+        this.etablissementExists = response.length > 0;
+        
+        // Si un établissement existe, cacher le formulaire par défaut
+        if (this.etablissementExists) {
+          this.showForm = false;
+        }
       }
     });
   }
 
   onSubmit(): void {
+    // Vérifier qu'un seul établissement peut être créé
+    if (!this.editMode && this.etablissementExists) {
+      this.notificationService.showError("Un établissement existe déjà. Vous pouvez uniquement le modifier.");
+      return;
+    }
+
     if (!this.etablissement.nom || !this.etablissement.email) {
       this.notificationService.showWarning("Le nom et l'email sont obligatoires.");
       return;
@@ -105,6 +121,8 @@ export class EtablissementComponent implements OnInit {
     formData.append('email', this.etablissement.email);
     if (this.etablissement.contact) formData.append('contact', this.etablissement.contact);
     if (this.etablissement.numero) formData.append('numero', this.etablissement.numero);
+    if (this.etablissement.devise) formData.append('devise', this.etablissement.devise);
+    if (this.etablissement.ministere) formData.append('ministere', this.etablissement.ministere);
     if (this.selectedLogoFile) {
       formData.append('logo', this.selectedLogoFile);
     }
@@ -125,12 +143,18 @@ export class EtablissementComponent implements OnInit {
         this.notificationService.showSuccess(successMessage);
         this.getEtablissements();
         this.resetForm();
+        
+        // Cacher le formulaire après la mise à jour
+        if (this.editMode) {
+          this.showForm = false;
+        }
       }
     });
   }
 
   onEdit(etablissement: Etablissement): void {
     this.editMode = true;
+    this.showForm = true;
     this.etablissement = { ...etablissement };
 
     // Prévisualisation: fichiers actuels
@@ -140,17 +164,26 @@ export class EtablissementComponent implements OnInit {
     this.selectedImageFile = null;
     this.logoPreviewUrl = this.etablissement.logo ? `${this.uploadsBaseUrl}${this.etablissement.logo}` : null;
     this.imagePreviewUrl = this.etablissement.image ? `${this.uploadsBaseUrl}${this.etablissement.image}` : null;
+    
+    // Scroll vers le formulaire
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   onDelete(etablissement: Etablissement): void {
     if (etablissement.id === undefined) return;
+    
+    if (!confirm("⚠️ Attention ! Êtes-vous sûr de vouloir supprimer l'établissement ? Cette action est irréversible.")) {
+      return;
+    }
+    
     this.service.delete(etablissement.id).subscribe({
-      next: () => {
-        this.notificationService.showSuccess("Établissement supprimé avec succès !");
-        this.getEtablissements();
-        this.resetForm();
-      }
-    });
+        next: () => {
+          this.notificationService.showSuccess("Établissement supprimé avec succès !");
+          this.etablissementExists = false;
+          this.getEtablissements();
+          this.resetForm();
+        }
+      });
   }
 
   resetForm(): void {
@@ -166,6 +199,19 @@ export class EtablissementComponent implements OnInit {
     if (logoInput) logoInput.value = '';
     const imageInput = document.getElementById('image-upload') as HTMLInputElement;
     if (imageInput) imageInput.value = '';
+    
+    // Cacher le formulaire si un établissement existe
+    if (this.etablissementExists) {
+      this.showForm = false;
+    }
+  }
+
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+    if (this.showForm && this.etablissementExists && this.etablissements.length > 0) {
+      // Charger l'établissement existant pour modification
+      this.onEdit(this.etablissements[0]);
+    }
   }
 
   private isValidEmail(email: string | null | undefined): boolean {

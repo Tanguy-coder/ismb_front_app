@@ -6,7 +6,7 @@ import { PageBreadcrumbComponent } from "../../../shared/components/common/page-
 import { AnneeScolaire } from "../../../models/annee-scolaire";
 import { AnneeService } from "../../../services/annee.service";
 import { ButtonComponent } from "../../../shared/components/ui/button/button.component";
-import { CommonModule, DatePipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { NotificationService } from "../../../services/notification.service";
 import { DataTableComponent, DataTableColumn } from '../../../shared/components/datatable/datatable.component';
 
@@ -20,8 +20,7 @@ import { DataTableComponent, DataTableColumn } from '../../../shared/components/
     PageBreadcrumbComponent,
     ButtonComponent,
     CommonModule,
-    DataTableComponent,
-    DatePipe
+    DataTableComponent
   ],
   templateUrl: './annee-scolaire.component.html',
   styles: ``
@@ -112,12 +111,12 @@ export class AnneeScolaireComponent implements OnInit {
     onDelete(annee: AnneeScolaire): void {
         if (annee.id === undefined) return;
         this.service.delete(annee.id).subscribe({
-            next: () => {
-                this.notificationService.showSuccess("Année scolaire supprimée avec succès !");
-                this.getAnnees();
-                this.resetForm(); // Also reset form in case the deleted item was being edited
-            }
-        });
+                next: () => {
+                    this.notificationService.showSuccess("Année scolaire supprimée avec succès !");
+                    this.getAnnees();
+                    this.resetForm(); // Also reset form in case the deleted item was being edited
+                }
+            });
     }
 
     resetForm(): void {
