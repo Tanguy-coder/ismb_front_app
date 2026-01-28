@@ -1,0 +1,244 @@
+/* Vue écran - cacher la vue d'impression */
+.print-view {
+  display: none;
+}
+
+/* Animation pour le chargement */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Styles d'impression - Format officiel */
+@media print {
+  /* Configuration de la page */
+  @page {
+    margin: 1cm;
+    size: A4 portrait;
+  }
+
+  /* Reset et configuration du body */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Masquer TOUT par défaut */
+  body > * {
+    display: none !important;
+  }
+
+  /* Masquer spécifiquement les éléments Angular et navigation */
+  app-root > *:not(router-outlet),
+  app-page-breadcrumb,
+  .no-print,
+  app-button,
+  button,
+  .screen-view,
+  nav,
+  header,
+  footer {
+    display: none !important;
+  }
+
+  /* Afficher UNIQUEMENT la vue d'impression */
+  .print-view {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* En-tête officiel */
+  .print-header {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid black;
+    font-size: 9pt;
+    page-break-inside: avoid;
+  }
+
+  .print-header-left {
+    text-align: left;
+  }
+
+  .print-header-left > div {
+    margin-bottom: 0.2rem;
+  }
+
+  .print-header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .print-logo {
+    height: 60px;
+    width: 60px;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+  }
+
+  .print-header-right {
+    text-align: right;
+  }
+
+  .print-header-right > div {
+    margin-bottom: 0.2rem;
+  }
+
+  /* Titre et statistiques */
+  .print-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .print-title h1 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-decoration: underline;
+  }
+
+  .print-stats {
+    font-size: 10pt;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+
+  /* Tableau officiel */
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black;
+    margin-bottom: 2rem;
+    font-size: 8pt;
+  }
+
+  .print-table th,
+  .print-table td {
+    border: 1px solid black;
+    padding: 0.25rem 0.4rem;
+  }
+
+  .print-table thead {
+    background-color: #f0f0f0;
+  }
+
+  .print-table th {
+    font-weight: bold;
+    text-align: center;
+    font-size: 8pt;
+    padding: 0.4rem 0.3rem;
+  }
+
+  .print-table th.text-left {
+    text-align: left;
+  }
+
+  .print-table td {
+    font-size: 8pt;
+  }
+
+  .print-table tbody tr {
+    page-break-inside: avoid;
+  }
+
+  /* Colonnes étroites pour les évaluations */
+  .print-table th:nth-child(6),
+  .print-table th:nth-child(7),
+  .print-table th:nth-child(8),
+  .print-table td:nth-child(6),
+  .print-table td:nth-child(7),
+  .print-table td:nth-child(8) {
+    width: 50px;
+    min-width: 50px;
+  }
+
+  /* Colonne Nom & Prénoms plus large */
+  .print-table th:nth-child(2),
+  .print-table td:nth-child(2) {
+    min-width: 180px;
+  }
+
+  /* Signatures */
+  .print-signatures {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+    font-size: 9pt;
+  }
+
+  .signature-label {
+    font-weight: 600;
+    margin-bottom: 3rem;
+  }
+
+  .signature-line {
+    border-top: 1px solid #666;
+    padding-top: 0.3rem;
+    margin-top: 2rem;
+  }
+
+  /* Forcer les couleurs noires */
+  * {
+    color: black !important;
+    background: white !important;
+  }
+
+  .print-table {
+    border-color: black !important;
+  }
+
+  .print-table th,
+  .print-table td {
+    border-color: black !important;
+  }
+
+  .print-header {
+    border-bottom-color: black !important;
+  }
+
+  /* Éviter les coupures */
+  .print-header,
+  .print-title {
+    page-break-inside: avoid;
+    page-break-after: avoid;
+  }
+
+  .print-table thead {
+    display: table-header-group;
+  }
+
+  /* Optimiser l'espace */
+  .print-view {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* S'assurer que seul ce contenu est visible */
+  html, body {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Forcer l'affichage de la print-view par-dessus tout */
+  .print-view {
+    z-index: 9999 !important;
+  }
+}
