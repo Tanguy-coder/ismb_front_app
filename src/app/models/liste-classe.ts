@@ -5,8 +5,10 @@ export class ListeClasse {
     sexe?: string;
     age?: number;
     lieuNaissance?: string;
+    dateNaissance?: string;
     nationalite?: string;
     photo?: string;
+    telephone?: string;
     filiere?: string;
     statut?: string; // N = Normal, D = Doublant
 }

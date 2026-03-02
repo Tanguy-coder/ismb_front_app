@@ -29,7 +29,7 @@
 
 /* En-tête */
 .card-header {
-  background: linear-gradient(to right, #f4a582 0%, #fdd0bb 100%);
+  background: linear-gradient(to right, #1E2B50 0%, #1E2B50 100%);
   padding: 2mm 2mm 1mm 2mm;
   display: grid;
   grid-template-columns: 15mm 1fr 15mm;
@@ -55,22 +55,22 @@
 }
 
 .country-name {
-  font-size: 7pt;
+  font-size: 5pt;
   font-weight: bold;
-  color: #333;
+  color: #ffffff;
   line-height: 1.1;
 }
 
 .country-motto {
   font-size: 5pt;
-  color: #555;
+  color: #f29f05;
   line-height: 1.1;
 }
 
 .school-name {
   font-size: 8pt;
   font-weight: bold;
-  color: #000;
+  color: #ffffff;
   margin-top: 0.5mm;
   line-height: 1.1;
 }
@@ -78,7 +78,7 @@
 .card-type {
   font-size: 6pt;
   font-weight: bold;
-  color: #333;
+  color: #f29f05;
   margin-top: 0.5mm;
   line-height: 1.1;
 }
@@ -94,14 +94,14 @@
 }
 
 .badge-icon {
-  font-size: 12pt;
+  font-size: 22pt;
   line-height: 1;
 }
 
 .badge-text {
   font-size: 5pt;
   font-weight: bold;
-  color: #d4730f;
+  color: #f29f05;
   line-height: 1;
 }
 

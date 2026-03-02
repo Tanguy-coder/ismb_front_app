@@ -58,6 +58,7 @@ export class CarteEtudiantComponent implements OnInit {
       next: (data) => {
         this.etudiants = data;
         this.loading = false;
+        console.log(this.etudiants)
       },
       error: (error) => {
         console.error('Erreur lors du chargement des étudiants:', error);

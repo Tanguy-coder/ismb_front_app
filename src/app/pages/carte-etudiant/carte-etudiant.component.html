@@ -33,11 +33,11 @@
               *ngIf="getEtablissementLogoUrl()" 
               [src]="getEtablissementLogoUrl()" 
               alt="Logo"
-              class="header-logo"
+              class="mr-3 flex items-center justify-center rounded-full h-11 w-11 text-white font-semibold text-lg"
             />
           </div>
           <div class="card-header-center">
-            <div class="country-name">{{ (etablissement[0] && etablissement[0].ministere) || 'RÉPUBLIQUE DU TOGO' }}</div>
+            <div class="country-name">{{ (etablissement[0] && etablissement[0].ministere) || 'RÉPUBLIQUE TOGOLAISE' }}</div>
             <div class="country-motto">Travail - Liberté - Patrie</div>
             <div class="school-name">{{ (etablissement[0] && etablissement[0].nom) || 'ÉTABLISSEMENT' }}</div>
             <div class="card-type">CARTE D'IDENTITÉ SCOLAIRE</div>
@@ -45,7 +45,7 @@
           <div class="card-header-right">
             <div class="education-badge">
               <div class="badge-icon">🎓</div>
-              <div class="badge-text">EDUCATION</div>
+              <div class="badge-text"></div>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
 
           <!-- Informations -->
           <div class="info-section">
-            <div class="academic-year">ANNÉE SCOLAIRE : {{ anneeCode }}</div>
+            <div class="academic-year">ANNÉE ACADEMIQUE : {{ anneeCode }}</div>
             
             <div class="info-row">
               <span class="info-label">Nom :</span>
@@ -78,7 +78,7 @@
             <div class="info-row-inline">
               <div class="info-item">
                 <span class="info-label">Née le :</span>
-                <span class="info-value">{{ etudiant.age ? (2024 - etudiant.age + '-01-01') : '-' }}</span>
+                <span class="info-value">{{ etudiant.dateNaissance }}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">À</span>
@@ -87,19 +87,20 @@
             </div>
 
             <div class="info-row-inline">
+            <div class="info-item">
+                <span class="info-label">Parcourt :</span>
+                <span class="info-value">{{ filiereLibelle }}</span>
+            </div>
               <div class="info-item">
                 <span class="info-label">Sexe :</span>
                 <span class="info-value">{{ etudiant.sexe || '-' }}</span>
               </div>
-              <div class="info-item">
-                <span class="info-label">Classe :</span>
-                <span class="info-value">{{ filiereLibelle }}</span>
-              </div>
+
             </div>
 
             <div class="info-row">
               <span class="info-label">Contact :</span>
-              <span class="info-value">**********</span>
+              <span class="info-value">{{etudiant.telephone}}</span>
             </div>
           </div>
 
