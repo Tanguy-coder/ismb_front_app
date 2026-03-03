@@ -38,8 +38,8 @@
           </div>
           <div class="card-header-center">
             <div class="country-name">{{ (etablissement[0] && etablissement[0].ministere) || 'RÉPUBLIQUE TOGOLAISE' }}</div>
-            <div class="country-motto">Travail - Liberté - Patrie</div>
             <div class="school-name">{{ (etablissement[0] && etablissement[0].nom) || 'ÉTABLISSEMENT' }}</div>
+              <div class="country-motto">{{etablissement[0].devise}}</div>
             <div class="card-type">CARTE D'IDENTITÉ SCOLAIRE</div>
           </div>
           <div class="card-header-right">
@@ -88,7 +88,7 @@
 
             <div class="info-row-inline">
             <div class="info-item">
-                <span class="info-label">Parcourt :</span>
+                <span class="info-label">Parcours :</span>
                 <span class="info-value">{{ filiereLibelle }}</span>
             </div>
               <div class="info-item">
