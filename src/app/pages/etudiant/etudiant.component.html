@@ -93,7 +93,7 @@
                             dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     >
                         <option [ngValue]="undefined">Sélectionner une filière</option>
-                        <option *ngFor="let filiere of filieres" [ngValue]="filiere">{{ filiere.libelle }}</option>
+                        <option *ngFor="let filiere of filieres" [ngValue]="filiere">{{ filiere.libelle }}--({{filiere.niveau?.libelle}})</option>
                     </select>
                 </div>
                 <div>
